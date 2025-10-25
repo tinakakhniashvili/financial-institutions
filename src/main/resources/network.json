@@ -1,0 +1,58 @@
+{
+  "generatedOn": "2025-10-20",
+  "lastUpdated": "2025-10-24T11:45:00",
+  "banks": [
+    {
+      "name": "Solvd Bank",
+      "active": true,
+      "address": {
+        "country": "GE",
+        "city": "Tbilisi",
+        "line1": "Rustaveli Ave 1",
+        "zip": "0108"
+      },
+      "branches": [
+        {
+          "code": "TBS-001",
+          "address": {
+            "country": "GE",
+            "city": "Tbilisi",
+            "line1": "Freedom Sq 2",
+            "zip": "0105"
+          },
+          "employees": [
+            {
+              "id": "E100",
+              "fullName": "Nino Beridze",
+              "hiredDate": "2022-03-15",
+              "manager": true
+            }
+          ]
+        }
+      ],
+      "customers": [
+        {
+          "id": "C200",
+          "fullName": "Gocha Kakhniashvili",
+          "birthDate": "1968-04-29",
+          "accounts": [
+            {
+              "iban": "GE29TB12345678901234",
+              "balance": 1250.75,
+              "type": "CHECKING",
+              "openedOn": "2023-01-05",
+              "transactions": [
+                {
+                  "id": "T1",
+                  "amount": 300.0,
+                  "timestamp": "2025-10-21T09:10:00",
+                  "kind": "DEPOSIT"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

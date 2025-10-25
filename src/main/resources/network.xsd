@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xsd:simpleType name="accountType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="CHECKING"/>
+            <xsd:enumeration value="SAVINGS"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="transactionType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="DEPOSIT"/>
+            <xsd:enumeration value="WITHDRAWAL"/>
+            <xsd:enumeration value="TRANSFER"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="address">
+        <xsd:sequence>
+            <xsd:element name="country" type="xsd:string"/>
+            <xsd:element name="city" type="xsd:string"/>
+            <xsd:element name="line1" type="xsd:string"/>
+            <xsd:element name="zip" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="transaction">
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:string"/>
+            <xsd:element name="amount" type="xsd:decimal"/>
+            <xsd:element name="timestamp" type="xsd:dateTime"/>
+            <xsd:element name="kind" type="transactionType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="account">
+        <xsd:sequence>
+            <xsd:element name="iban" type="xsd:string"/>
+            <xsd:element name="balance" type="xsd:decimal"/>
+            <xsd:element name="type" type="accountType"/>
+            <xsd:element name="openedOn" type="xsd:date"/>
+            <xsd:element name="transactions" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="transaction" type="transaction" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="customer">
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:string"/>
+            <xsd:element name="fullName" type="xsd:string"/>
+            <xsd:element name="birthDate" type="xsd:date"/>
+            <xsd:element name="accounts" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="account" type="account" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="employee">
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:string"/>
+            <xsd:element name="fullName" type="xsd:string"/>
+            <xsd:element name="hiredDate" type="xsd:date"/>
+            <xsd:element name="manager" type="xsd:boolean"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="branch">
+        <xsd:sequence>
+            <xsd:element name="code" type="xsd:string"/>
+            <xsd:element name="address" type="address"/>
+            <xsd:element name="employees" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="employee" type="employee" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="bank">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="active" type="xsd:boolean"/>
+            <xsd:element name="address" type="address"/>
+            <xsd:element name="branches" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="branch" type="branch" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="customers" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="customer" type="customer" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="financialNetwork">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="generatedOn" type="xsd:date"/>
+                <xsd:element name="lastUpdated" type="xsd:dateTime"/>
+                <xsd:element name="banks">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="bank" type="bank" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

@@ -12,9 +12,13 @@
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <jackson.version>2.17.2</jackson.version>
         <jaxb.version>4.0.4</jaxb.version>
         <jsonpath.version>2.9.0</jsonpath.version>
+        <slf4j.version>2.0.13</slf4j.version>
+        <exec.plugin.version>3.4.1</exec.plugin.version>
+        <compiler.plugin.version>3.13.0</compiler.plugin.version>
     </properties>
 
     <dependencies>
@@ -28,6 +32,7 @@
             <artifactId>jaxb-runtime</artifactId>
             <version>${jaxb.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -38,19 +43,59 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <version>${jsonpath.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.minidev</groupId>
+                    <artifactId>json-smart</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.minidev</groupId>
+                    <artifactId>accessors-smart</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>accessors-smart</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.plugin.version}</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>${exec.plugin.version}</version>
+                <configuration>
+                    <mainClass>com.solvd.financialinstitution.Main</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<financialNetwork xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="network.xsd">
+    <generatedOn>2025-10-20</generatedOn>
+    <lastUpdated>2025-10-24T11:45:00</lastUpdated>
+    <banks>
+        <bank>
+            <name>Solvd Bank</name>
+            <active>true</active>
+            <address>
+                <country>GE</country>
+                <city>Tbilisi</city>
+                <line1>Rustaveli Ave 1</line1>
+                <zip>0108</zip>
+            </address>
+            <branches>
+                <branch>
+                    <code>TBS-001</code>
+                    <address>
+                        <country>GE</country>
+                        <city>Tbilisi</city>
+                        <line1>Freedom Sq 2</line1>
+                        <zip>0105</zip>
+                    </address>
+                    <employees>
+                        <employee>
+                            <id>E100</id>
+                            <fullName>Nino Beridze</fullName>
+                            <hiredDate>2022-03-15</hiredDate>
+                            <manager>true</manager>
+                        </employee>
+                    </employees>
+                </branch>
+            </branches>
+            <customers>
+                <customer>
+                    <id>C200</id>
+                    <fullName>Gocha Kakhniashvili</fullName>
+                    <birthDate>1968-04-29</birthDate>
+                    <accounts>
+                        <account>
+                            <iban>GE29TB12345678901234</iban>
+                            <balance>1250.75</balance>
+                            <type>CHECKING</type>
+                            <openedOn>2023-01-05</openedOn>
+                            <transactions>
+                                <transaction>
+                                    <id>T1</id>
+                                    <amount>300.00</amount>
+                                    <timestamp>2025-10-21T09:10:00</timestamp>
+                                    <kind>DEPOSIT</kind>
+                                </transaction>
+                            </transactions>
+                        </account>
+                    </accounts>
+                </customer>
+            </customers>
+        </bank>
+    </banks>
+</financialNetwork>
