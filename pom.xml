@@ -12,7 +12,6 @@
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
         <jackson.version>2.17.2</jackson.version>
         <jaxb.version>4.0.4</jaxb.version>
         <jsonpath.version>2.9.0</jsonpath.version>
@@ -22,6 +21,7 @@
     </properties>
 
     <dependencies>
+        <!-- JAXB -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -33,6 +33,7 @@
             <version>${jaxb.version}</version>
         </dependency>
 
+        <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -44,6 +45,7 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <!-- JSONPath -->
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
@@ -72,9 +74,13 @@
 
         <dependency>
             <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

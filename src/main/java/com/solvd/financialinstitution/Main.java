@@ -5,6 +5,7 @@ import com.solvd.financialinstitution.json.JsonReader;
 import com.solvd.financialinstitution.model.FinancialNetwork;
 import com.solvd.financialinstitution.parsers.XmlDomParser;
 import com.solvd.financialinstitution.parsers.XmlValidator;
+import com.solvd.financialinstitution.parsers.sax.XmlSaxParser;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -16,7 +17,12 @@ public class Main {
         try (var is = Main.class.getResourceAsStream("/network.xml")) {
             var domParser = new XmlDomParser();
             FinancialNetwork net1 = domParser.parse(is);
-            System.out.println("DOM banks: " + net1.getBanks().size());
+            System.out.println("DOM banks: " + (net1.getBanks() == null ? 0 : net1.getBanks().size()));
+        }
+        try (var is = Main.class.getResourceAsStream("/network.xml")) {
+            var saxParser = new XmlSaxParser();
+            FinancialNetwork netSax = saxParser.parse(is);
+            System.out.println("SAX banks: " + (netSax.getBanks() == null ? 0 : netSax.getBanks().size()));
         }
         try (var is = Main.class.getResourceAsStream("/network.xml")) {
             var jaxb = new JaxbReader();
@@ -28,8 +34,6 @@ public class Main {
             FinancialNetwork net3 = jsonReader.read(is);
             System.out.println("JSON first customer: " + net3.getBanks().get(0).getCustomers().get(0).getFullName());
         }
-        try (var is = Main.class.getResourceAsStream("/network.json")) {
-            new JsonReader().demoJsonPath(is);
-        }
+        new JsonReader().demoJsonPath("/network.json");
     }
 }
