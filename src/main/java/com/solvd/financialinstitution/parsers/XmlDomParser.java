@@ -3,6 +3,7 @@ package com.solvd.financialinstitution.parsers;
 import com.solvd.financialinstitution.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,7 +17,13 @@ import java.util.List;
 
 public class XmlDomParser {
     public FinancialNetwork parse(InputStream is) throws Exception {
-        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        dbf.setXIncludeAware(false);
+        dbf.setExpandEntityReferences(false);
+        Document doc = dbf.newDocumentBuilder().parse(is);
         doc.getDocumentElement().normalize();
         FinancialNetwork network = new FinancialNetwork();
         network.setGeneratedOn(LocalDate.parse(text(doc.getDocumentElement(), "generatedOn")));
@@ -134,7 +141,14 @@ public class XmlDomParser {
 
     private static Element child(Element parent, String tag) {
         if (parent == null) return null;
-        NodeList nl = parent.getElementsByTagName(tag);
-        return nl.getLength() > 0 ? (Element) nl.item(0) : null;
+        NodeList nodes = parent.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node n = nodes.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                if (tag.equals(e.getTagName())) return e;
+            }
+        }
+        return null;
     }
 }

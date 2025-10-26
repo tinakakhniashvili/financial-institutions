@@ -2,6 +2,7 @@ package com.solvd.financialinstitution.parsers.sax;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
+
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -31,7 +32,11 @@ public class FinancialNetworkHandler extends DefaultHandler {
     private static final class Element {
         final String name;
         final Object obj;
-        Element(String n, Object o) { this.name = n; this.obj = o; }
+
+        Element(String n, Object o) {
+            this.name = n;
+            this.obj = o;
+        }
     }
 
     @Override
@@ -99,9 +104,14 @@ public class FinancialNetworkHandler extends DefaultHandler {
         boolean up = true;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (c == '-' || c == '_' ) { up = true; continue; }
-            if (up) { b.append(Character.toUpperCase(c)); up = false; }
-            else b.append(c);
+            if (c == '-' || c == '_') {
+                up = true;
+                continue;
+            }
+            if (up) {
+                b.append(Character.toUpperCase(c));
+                up = false;
+            } else b.append(c);
         }
         return b.toString();
     }
@@ -142,7 +152,8 @@ public class FinancialNetworkHandler extends DefaultHandler {
                 List<Object> list = (List<Object>) listObj;
                 list.add(child);
                 return true;
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         return false;
     }
@@ -158,7 +169,8 @@ public class FinancialNetworkHandler extends DefaultHandler {
                     f.set(parent, child);
                     return true;
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         return false;
     }
@@ -193,7 +205,8 @@ public class FinancialNetworkHandler extends DefaultHandler {
                     return;
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     private Field findField(Class<?> cls, String name) {
@@ -246,7 +259,8 @@ public class FinancialNetworkHandler extends DefaultHandler {
             } else if (prop.endsWith("Name")) {
                 setScalar(target, "name", value);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     private PropertyDescriptor getProperty(Class<?> cls, String name) {
@@ -254,7 +268,8 @@ public class FinancialNetworkHandler extends DefaultHandler {
             for (PropertyDescriptor pd : Introspector.getBeanInfo(cls).getPropertyDescriptors()) {
                 if (pd.getName().equals(name)) return pd;
             }
-        } catch (IntrospectionException ignored) {}
+        } catch (IntrospectionException ignored) {
+        }
         return null;
     }
 
@@ -289,7 +304,8 @@ public class FinancialNetworkHandler extends DefaultHandler {
                 f.set(target, v);
                 return true;
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return false;
     }
 }
