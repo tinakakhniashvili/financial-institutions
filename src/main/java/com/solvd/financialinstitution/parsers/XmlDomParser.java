@@ -55,6 +55,7 @@ public class XmlDomParser {
             c.setFullName(text(el, "fullName"));
             c.setBirthDate(LocalDate.parse(text(el, "birthDate")));
             c.setAccounts(readAccounts(child(el, "accounts")));
+            c.setLoans(readLoans((Element) el.getElementsByTagName("loans").item(0)));
             list.add(c);
         }
         return list;
@@ -72,6 +73,7 @@ public class XmlDomParser {
             a.setType(Enum.valueOf(AccountType.class, text(el, "type")));
             a.setOpenedOn(LocalDate.parse(text(el, "openedOn")));
             a.setTransactions(readTransactions(child(el, "transactions")));
+            a.setCards(readCards((Element) el.getElementsByTagName("cards").item(0)));
             list.add(a);
         }
         return list;
@@ -132,6 +134,56 @@ public class XmlDomParser {
         a.setLine1(text(addrEl, "line1"));
         a.setZip(text(addrEl, "zip"));
         return a;
+    }
+
+    private List<Card> readCards(Element cardsEl) {
+        List<Card> list = new ArrayList<>();
+        if (cardsEl == null) return list;
+        NodeList items = cardsEl.getElementsByTagName("card");
+        for (int i = 0; i < items.getLength(); i++) {
+            Element el = (Element) items.item(i);
+            Card c = new Card();
+            c.setPanMasked(text(el, "panMasked"));
+            String exp = text(el, "expiry");
+            if (exp != null && !exp.isEmpty()) {
+                c.setExpiry(LocalDate.parse(exp));
+            }
+            String cl = text(el, "contactless");
+            if (cl != null && !cl.isEmpty()) {
+                c.setContactless(Boolean.parseBoolean(cl));
+            }
+            list.add(c);
+        }
+        return list;
+    }
+
+    private List<Loan> readLoans(Element loansEl) {
+        List<Loan> list = new ArrayList<>();
+        if (loansEl == null) return list;
+        NodeList items = loansEl.getElementsByTagName("loan");
+        for (int i = 0; i < items.getLength(); i++) {
+            Element el = (Element) items.item(i);
+            Loan L = new Loan();
+            L.setId(text(el, "id"));
+            String principal = text(el, "principal");
+            if (principal != null && !principal.isEmpty()) {
+                L.setPrincipal(new BigDecimal(principal));
+            }
+            String rate = text(el, "rate");
+            if (rate != null && !rate.isEmpty()) {
+                L.setRate(new BigDecimal(rate));
+            }
+            String s = text(el, "start");
+            if (s != null && !s.isEmpty()) {
+                L.setStart(LocalDate.parse(s));
+            }
+            String e = text(el, "end");
+            if (e != null && !e.isEmpty()) {
+                L.setEnd(LocalDate.parse(e));
+            }
+            list.add(L);
+        }
+        return list;
     }
 
     private static String text(Element parent, String tag) {

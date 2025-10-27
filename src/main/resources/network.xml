@@ -36,12 +36,27 @@
                     <id>C200</id>
                     <fullName>Gocha Kakhniashvili</fullName>
                     <birthDate>1968-04-29</birthDate>
+
                     <accounts>
                         <account>
                             <iban>GE29TB12345678901234</iban>
                             <balance>1250.75</balance>
                             <type>CHECKING</type>
                             <openedOn>2023-01-05</openedOn>
+
+                            <cards>
+                                <card>
+                                    <panMasked>**** **** **** 1234</panMasked>
+                                    <expiry>2026-12-31</expiry>
+                                    <contactless>true</contactless>
+                                </card>
+                                <card>
+                                    <panMasked>**** **** **** 9876</panMasked>
+                                    <expiry>2027-06-30</expiry>
+                                    <contactless>false</contactless>
+                                </card>
+                            </cards>
+
                             <transactions>
                                 <transaction>
                                     <id>T1</id>
@@ -52,6 +67,17 @@
                             </transactions>
                         </account>
                     </accounts>
+
+                    <loans>
+                        <loan>
+                            <id>L-001</id>
+                            <principal>5000.00</principal>
+                            <rate>0.12</rate>
+                            <start>2024-01-01</start>
+                            <end>2026-01-01</end>
+                        </loan>
+                    </loans>
+
                 </customer>
             </customers>
         </bank>

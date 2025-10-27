@@ -19,6 +19,9 @@ public class Customer {
     @XmlElementWrapper(name = "accounts")
     @XmlElement(name = "account")
     private List<Account> accounts;
+    @XmlElementWrapper(name = "loans")
+    @XmlElement(name = "loan")
+    private List<Loan> loans;
 
     public Customer() {
     }
@@ -53,5 +56,13 @@ public class Customer {
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
     }
 }
