@@ -13,6 +13,7 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Account {
+    private long id;
     private String iban;
     private BigDecimal balance;
     private AccountType type;
@@ -26,6 +27,14 @@ public class Account {
     private List<Card> cards;
 
     public Account() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getIban() {

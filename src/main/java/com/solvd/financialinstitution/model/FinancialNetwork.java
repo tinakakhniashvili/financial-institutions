@@ -11,6 +11,7 @@ import java.util.List;
 @XmlRootElement(name = "financialNetwork")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FinancialNetwork {
+    private Long id;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate generatedOn;
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -20,6 +21,16 @@ public class FinancialNetwork {
     private List<Bank> banks;
 
     public FinancialNetwork() {
+    }
+
+    public long getId()
+    {
+        return id;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
     }
 
     public LocalDate getGeneratedOn() {

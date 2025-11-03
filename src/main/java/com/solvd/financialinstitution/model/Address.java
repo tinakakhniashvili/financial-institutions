@@ -5,12 +5,22 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
+    private long  id;
+
     private String country;
     private String city;
     private String line1;
     private String zip;
 
     public Address() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getCountry() {

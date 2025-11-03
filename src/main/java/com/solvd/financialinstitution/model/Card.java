@@ -9,12 +9,23 @@ import java.time.LocalDate;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Card {
+    private Long id;
     private String panMasked;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate expiry;
     private boolean contactless;
 
     public Card() {
+    }
+
+    public long getId()
+    {
+        return id;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
     }
 
     public String getPanMasked() {

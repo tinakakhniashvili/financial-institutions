@@ -33,6 +33,7 @@ public class XmlDomParser {
         for (int i = 0; i < bankNodes.getLength(); i++) {
             Element bEl = (Element) bankNodes.item(i);
             Bank bank = new Bank();
+            bank.setId(parseLong(text(bEl, "id")));
             bank.setName(text(bEl, "name"));
             bank.setActive(Boolean.parseBoolean(text(bEl, "active")));
             bank.setAddress(readAddress(child(bEl, "address")));
@@ -51,7 +52,7 @@ public class XmlDomParser {
         for (int i = 0; i < nodes.getLength(); i++) {
             Element el = (Element) nodes.item(i);
             Customer c = new Customer();
-            c.setId(text(el, "id"));
+            c.setId(parseLong(text(el, "id")));
             c.setFullName(text(el, "fullName"));
             c.setBirthDate(LocalDate.parse(text(el, "birthDate")));
             c.setAccounts(readAccounts(child(el, "accounts")));
@@ -68,9 +69,10 @@ public class XmlDomParser {
         for (int i = 0; i < nodes.getLength(); i++) {
             Element el = (Element) nodes.item(i);
             Account a = new Account();
+            a.setId(parseLong(text(el, "id")));
             a.setIban(text(el, "iban"));
             a.setBalance(new BigDecimal(text(el, "balance")));
-            a.setType(Enum.valueOf(AccountType.class, text(el, "type")));
+            a.setType(parseAccountType(child(el, "type")));
             a.setOpenedOn(LocalDate.parse(text(el, "openedOn")));
             a.setTransactions(readTransactions(child(el, "transactions")));
             a.setCards(readCards((Element) el.getElementsByTagName("cards").item(0)));
@@ -86,10 +88,10 @@ public class XmlDomParser {
         for (int i = 0; i < nodes.getLength(); i++) {
             Element el = (Element) nodes.item(i);
             Transaction t = new Transaction();
-            t.setId(text(el, "id"));
+            t.setId(parseLong(text(el, "id")));
             t.setAmount(new BigDecimal(text(el, "amount")));
             t.setTimestamp(LocalDateTime.parse(text(el, "timestamp")));
-            t.setKind(Enum.valueOf(TransactionType.class, text(el, "kind")));
+            t.setKind(parseTransactionType(child(el, "kind")));
             list.add(t);
         }
         return list;
@@ -102,6 +104,7 @@ public class XmlDomParser {
         for (int i = 0; i < nodes.getLength(); i++) {
             Element el = (Element) nodes.item(i);
             Branch br = new Branch();
+            br.setId(parseLong(text(el, "id")));
             br.setCode(text(el, "code"));
             br.setAddress(readAddress(child(el, "address")));
             br.setEmployees(readEmployees(child(el, "employees")));
@@ -117,7 +120,7 @@ public class XmlDomParser {
         for (int i = 0; i < nodes.getLength(); i++) {
             Element el = (Element) nodes.item(i);
             Employee e = new Employee();
-            e.setId(text(el, "id"));
+            e.setId(parseLong(text(el, "id")));
             e.setFullName(text(el, "fullName"));
             e.setHiredDate(LocalDate.parse(text(el, "hiredDate")));
             e.setManager(Boolean.parseBoolean(text(el, "manager")));
@@ -129,6 +132,7 @@ public class XmlDomParser {
     private Address readAddress(Element addrEl) {
         if (addrEl == null) return null;
         Address a = new Address();
+        a.setId(parseLong(text(addrEl, "id")));
         a.setCountry(text(addrEl, "country"));
         a.setCity(text(addrEl, "city"));
         a.setLine1(text(addrEl, "line1"));
@@ -143,15 +147,12 @@ public class XmlDomParser {
         for (int i = 0; i < items.getLength(); i++) {
             Element el = (Element) items.item(i);
             Card c = new Card();
+            c.setId(parseLong(text(el, "id")));
             c.setPanMasked(text(el, "panMasked"));
             String exp = text(el, "expiry");
-            if (exp != null && !exp.isEmpty()) {
-                c.setExpiry(LocalDate.parse(exp));
-            }
+            if (exp != null && !exp.isEmpty()) c.setExpiry(LocalDate.parse(exp));
             String cl = text(el, "contactless");
-            if (cl != null && !cl.isEmpty()) {
-                c.setContactless(Boolean.parseBoolean(cl));
-            }
+            if (cl != null && !cl.isEmpty()) c.setContactless(Boolean.parseBoolean(cl));
             list.add(c);
         }
         return list;
@@ -164,26 +165,44 @@ public class XmlDomParser {
         for (int i = 0; i < items.getLength(); i++) {
             Element el = (Element) items.item(i);
             Loan L = new Loan();
-            L.setId(text(el, "id"));
+            L.setId(parseLong(text(el, "id")));
             String principal = text(el, "principal");
-            if (principal != null && !principal.isEmpty()) {
-                L.setPrincipal(new BigDecimal(principal));
-            }
+            if (principal != null && !principal.isEmpty()) L.setPrincipal(new BigDecimal(principal));
             String rate = text(el, "rate");
-            if (rate != null && !rate.isEmpty()) {
-                L.setRate(new BigDecimal(rate));
-            }
+            if (rate != null && !rate.isEmpty()) L.setRate(new BigDecimal(rate));
             String s = text(el, "start");
-            if (s != null && !s.isEmpty()) {
-                L.setStart(LocalDate.parse(s));
-            }
+            if (s != null && !s.isEmpty()) L.setStart(LocalDate.parse(s));
             String e = text(el, "end");
-            if (e != null && !e.isEmpty()) {
-                L.setEnd(LocalDate.parse(e));
-            }
+            if (e != null && !e.isEmpty()) L.setEnd(LocalDate.parse(e));
             list.add(L);
         }
         return list;
+    }
+
+    private AccountType parseAccountType(Element typeEl) {
+        if (typeEl == null) return null;
+        AccountType t = new AccountType();
+        String idTxt = typeEl.getAttribute("id");
+        if (idTxt != null && !idTxt.isEmpty()) t.setId(parseLong(idTxt));
+        String code = typeEl.getAttribute("code");
+        if (code == null || code.isEmpty()) code = typeEl.getTextContent();
+        if (code != null) t.setCode(code.trim());
+        String name = typeEl.getTextContent();
+        if (name != null && !name.isBlank() && !name.equalsIgnoreCase(code)) t.setName(name.trim());
+        return t;
+    }
+
+    private TransactionType parseTransactionType(Element kindEl) {
+        if (kindEl == null) return null;
+        TransactionType tt = new TransactionType();
+        String idTxt = kindEl.getAttribute("id");
+        if (idTxt != null && !idTxt.isEmpty()) tt.setId(parseLong(idTxt));
+        String code = kindEl.getAttribute("code");
+        if (code == null || code.isEmpty()) code = kindEl.getTextContent();
+        if (code != null) tt.setCode(code.trim());
+        String name = kindEl.getTextContent();
+        if (name != null && !name.isBlank() && !name.equalsIgnoreCase(code)) tt.setName(name.trim());
+        return tt;
     }
 
     private static String text(Element parent, String tag) {
@@ -202,5 +221,10 @@ public class XmlDomParser {
             }
         }
         return null;
+    }
+
+    private static Long parseLong(String value) {
+        if (value == null || value.isEmpty()) return null;
+        try { return Long.parseLong(value); } catch (NumberFormatException e) { return null; }
     }
 }

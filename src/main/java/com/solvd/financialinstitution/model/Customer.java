@@ -12,7 +12,7 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Customer {
-    private String id;
+    private long id;
     private String fullName;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate birthDate;
@@ -26,11 +26,11 @@ public class Customer {
     public Customer() {
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

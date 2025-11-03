@@ -9,6 +9,7 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Bank {
+    private long id;
     private String name;
     private boolean active;
     private Address address;
@@ -20,6 +21,14 @@ public class Bank {
     private List<Customer> customers;
 
     public Bank() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
