@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
-    private long  id;
+    private Long  id;
 
     private String country;
     private String city;
@@ -15,11 +15,11 @@ public class Address {
     public Address() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

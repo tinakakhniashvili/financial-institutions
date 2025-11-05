@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Transaction {
-    private long id;
+    private Long id;
     private BigDecimal amount;
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime timestamp;
@@ -19,11 +19,11 @@ public class Transaction {
     public Transaction() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

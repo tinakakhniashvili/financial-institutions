@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Employee {
-    private long id;
+    private Long id;
     private String fullName;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate hiredDate;
@@ -18,11 +18,11 @@ public class Employee {
     public Employee() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

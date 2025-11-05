@@ -9,7 +9,7 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Branch {
-    private long id;
+    private Long id;
     private String code;
     private Address address;
     @XmlElementWrapper(name = "employees")
@@ -19,11 +19,11 @@ public class Branch {
     public Branch() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

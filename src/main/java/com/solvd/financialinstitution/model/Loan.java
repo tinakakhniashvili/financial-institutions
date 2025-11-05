@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Loan {
-    private long id;
+    private Long id;
     private BigDecimal principal;
     private BigDecimal rate;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -21,11 +21,11 @@ public class Loan {
     public Loan() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
