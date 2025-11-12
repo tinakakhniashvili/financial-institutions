@@ -24,8 +24,8 @@ public class FinancialNetworkHandler extends DefaultHandler {
     private final Deque<Element> stack = new ArrayDeque<>();
     private Object root;
 
-    public com.solvd.financialinstitution.model.FinancialNetwork getRoot() {
-        if (root instanceof com.solvd.financialinstitution.model.FinancialNetwork r) return r;
+    public com.solvd.financialinstitution.domain.FinancialNetwork getRoot() {
+        if (root instanceof com.solvd.financialinstitution.domain.FinancialNetwork r) return r;
         return null;
     }
 

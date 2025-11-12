@@ -1,6 +1,6 @@
 package com.solvd.financialinstitution.parsers.sax;
 
-import com.solvd.financialinstitution.model.FinancialNetwork;
+import com.solvd.financialinstitution.domain.FinancialNetwork;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;

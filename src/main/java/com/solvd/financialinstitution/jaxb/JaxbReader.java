@@ -1,6 +1,6 @@
 package com.solvd.financialinstitution.jaxb;
 
-import com.solvd.financialinstitution.model.FinancialNetwork;
+import com.solvd.financialinstitution.domain.FinancialNetwork;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;

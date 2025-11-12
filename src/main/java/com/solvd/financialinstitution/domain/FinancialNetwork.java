@@ -1,4 +1,4 @@
-package com.solvd.financialinstitution.model;
+package com.solvd.financialinstitution.domain;
 
 import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
@@ -23,13 +23,11 @@ public class FinancialNetwork {
     public FinancialNetwork() {
     }
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 

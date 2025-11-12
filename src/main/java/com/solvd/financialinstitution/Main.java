@@ -1,11 +1,19 @@
 package com.solvd.financialinstitution;
 
+import com.solvd.financialinstitution.domain.Customer;
+import com.solvd.financialinstitution.domain.FinancialNetwork;
 import com.solvd.financialinstitution.jaxb.JaxbReader;
 import com.solvd.financialinstitution.json.JsonReader;
-import com.solvd.financialinstitution.model.FinancialNetwork;
 import com.solvd.financialinstitution.parsers.XmlDomParser;
 import com.solvd.financialinstitution.parsers.XmlValidator;
 import com.solvd.financialinstitution.parsers.sax.XmlSaxParser;
+import com.solvd.financialinstitution.persistence.dao.CustomerDao;
+import com.solvd.financialinstitution.persistence.impl.CustomerDaoImpl;
+import com.solvd.financialinstitution.service.CustomerService;
+import com.solvd.financialinstitution.service.impl.CustomerServiceImpl;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -35,5 +43,20 @@ public class Main {
             System.out.println("JSON first customer: " + net3.getBanks().get(0).getCustomers().get(0).getFullName());
         }
         new JsonReader().demoJsonPath("/network.json");
+
+        CustomerDao customerDao = new CustomerDaoImpl();
+        CustomerService customerService = new CustomerServiceImpl(customerDao);
+
+        Customer customer = new Customer();
+        customer.setFullName("Test User");
+        customer.setBirthDate(LocalDate.of(1990, 1, 1));
+
+        customerService.create(customer);
+        System.out.println("Created customer with id = " + customer.getId());
+
+        List<Customer> customers = customerService.getAll();
+        for (Customer c : customers) {
+            System.out.println(c.getId() + " | " + c.getFullName() + " | " + c.getBirthDate());
+        }
     }
 }

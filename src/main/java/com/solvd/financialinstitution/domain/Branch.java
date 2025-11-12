@@ -1,4 +1,4 @@
-package com.solvd.financialinstitution.model;
+package com.solvd.financialinstitution.domain;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;

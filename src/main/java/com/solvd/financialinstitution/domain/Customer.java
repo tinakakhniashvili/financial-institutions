@@ -1,6 +1,6 @@
-package com.solvd.financialinstitution.model;
+package com.solvd.financialinstitution.domain;
 
-import com.solvd.financialinstitution.model.FinancialNetwork.LocalDateAdapter;
+import com.solvd.financialinstitution.domain.FinancialNetwork.LocalDateAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;

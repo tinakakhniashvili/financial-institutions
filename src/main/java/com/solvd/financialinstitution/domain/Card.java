@@ -1,6 +1,6 @@
-package com.solvd.financialinstitution.model;
+package com.solvd.financialinstitution.domain;
 
-import com.solvd.financialinstitution.model.FinancialNetwork.LocalDateAdapter;
+import com.solvd.financialinstitution.domain.FinancialNetwork.LocalDateAdapter;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -18,13 +18,11 @@ public class Card {
     public Card() {
     }
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 

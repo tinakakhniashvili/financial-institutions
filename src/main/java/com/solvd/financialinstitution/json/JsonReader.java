@@ -5,7 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
-import com.solvd.financialinstitution.model.FinancialNetwork;
+import com.solvd.financialinstitution.domain.FinancialNetwork;
 
 import java.io.InputStream;
 import java.util.List;

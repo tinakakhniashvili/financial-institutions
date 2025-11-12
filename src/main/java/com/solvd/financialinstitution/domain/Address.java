@@ -1,11 +1,11 @@
-package com.solvd.financialinstitution.model;
+package com.solvd.financialinstitution.domain;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
-    private Long  id;
+    private Long id;
 
     private String country;
     private String city;

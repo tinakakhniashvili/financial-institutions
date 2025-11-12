@@ -1,6 +1,6 @@
 package com.solvd.financialinstitution.parsers;
 
-import com.solvd.financialinstitution.model.*;
+import com.solvd.financialinstitution.domain.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -225,6 +225,10 @@ public class XmlDomParser {
 
     private static Long parseLong(String value) {
         if (value == null || value.isEmpty()) return null;
-        try { return Long.parseLong(value); } catch (NumberFormatException e) { return null; }
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }
