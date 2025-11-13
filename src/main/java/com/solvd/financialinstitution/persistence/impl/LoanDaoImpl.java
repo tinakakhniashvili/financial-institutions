@@ -14,7 +14,7 @@ public class LoanDaoImpl implements LoanDao {
 
     private static final String INSERT =
             "INSERT INTO loan (CUSTOMER_ID, BRANCH_ID, PRINCIPAL, RATE, START_DATE, END_DATE) " +
-            "VALUES (?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?)";
 
     private static final String SELECT_BY_ID =
             "SELECT ID, CUSTOMER_ID, BRANCH_ID, PRINCIPAL, RATE, START_DATE, END_DATE FROM loan WHERE ID = ?";
@@ -24,7 +24,7 @@ public class LoanDaoImpl implements LoanDao {
 
     private static final String UPDATE =
             "UPDATE loan SET CUSTOMER_ID=?, BRANCH_ID=?, PRINCIPAL=?, RATE=?, START_DATE=?, END_DATE=? " +
-            "WHERE ID = ?";
+                    "WHERE ID = ?";
 
     private static final String DELETE =
             "DELETE FROM loan WHERE ID = ?";
@@ -55,8 +55,11 @@ public class LoanDaoImpl implements LoanDao {
                 if (rs.next()) l.setId(rs.getLong(1));
             }
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 
     @Override
@@ -82,8 +85,11 @@ public class LoanDaoImpl implements LoanDao {
                 return Optional.of(l);
             }
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 
     @Override
@@ -109,8 +115,11 @@ public class LoanDaoImpl implements LoanDao {
                 list.add(l);
             }
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
 
         return list;
     }
@@ -137,8 +146,11 @@ public class LoanDaoImpl implements LoanDao {
 
             ps.executeUpdate();
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 
     @Override
@@ -147,7 +159,10 @@ public class LoanDaoImpl implements LoanDao {
         try (PreparedStatement ps = c.prepareStatement(DELETE)) {
             ps.setLong(1, id);
             ps.executeUpdate();
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 }

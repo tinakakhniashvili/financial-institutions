@@ -6,7 +6,6 @@ import com.solvd.financialinstitution.persistence.ConnectionPool;
 import com.solvd.financialinstitution.persistence.dao.AccountDao;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,18 +14,18 @@ public class AccountDaoImpl implements AccountDao {
 
     private static final String INSERT =
             "INSERT INTO account (CUSTOMER_ID, BRANCH_ID, ACCOUNT_TYPE_ID, IBAN, BALANCE, OPENED_ON) " +
-            "VALUES (?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?)";
 
     private static final String SELECT_BY_ID =
             "SELECT ID, CUSTOMER_ID, BRANCH_ID, ACCOUNT_TYPE_ID, IBAN, BALANCE, OPENED_ON " +
-            "FROM account WHERE ID = ?";
+                    "FROM account WHERE ID = ?";
 
     private static final String SELECT_ALL =
             "SELECT ID, CUSTOMER_ID, BRANCH_ID, ACCOUNT_TYPE_ID, IBAN, BALANCE, OPENED_ON FROM account";
 
     private static final String UPDATE =
             "UPDATE account SET CUSTOMER_ID=?, BRANCH_ID=?, ACCOUNT_TYPE_ID=?, IBAN=?, BALANCE=?, OPENED_ON=? " +
-            "WHERE ID = ?";
+                    "WHERE ID = ?";
 
     private static final String DELETE =
             "DELETE FROM account WHERE ID = ?";
@@ -117,8 +116,11 @@ public class AccountDaoImpl implements AccountDao {
                 list.add(a);
             }
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
 
         return list;
     }
@@ -155,7 +157,10 @@ public class AccountDaoImpl implements AccountDao {
         try (PreparedStatement ps = c.prepareStatement(DELETE)) {
             ps.setLong(1, id);
             ps.executeUpdate();
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 }

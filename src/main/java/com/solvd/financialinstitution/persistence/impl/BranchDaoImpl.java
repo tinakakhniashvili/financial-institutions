@@ -64,8 +64,11 @@ public class BranchDaoImpl implements BranchDao {
 
                 return Optional.of(br);
             }
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 
     @Override
@@ -85,8 +88,11 @@ public class BranchDaoImpl implements BranchDao {
                 list.add(br);
             }
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
 
         return list;
     }
@@ -100,8 +106,11 @@ public class BranchDaoImpl implements BranchDao {
             ps.setString(3, branch.getCode());
             ps.setLong(4, branch.getId());
             ps.executeUpdate();
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 
     @Override
@@ -110,7 +119,10 @@ public class BranchDaoImpl implements BranchDao {
         try (PreparedStatement ps = c.prepareStatement(DELETE)) {
             ps.setLong(1, id);
             ps.executeUpdate();
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 }

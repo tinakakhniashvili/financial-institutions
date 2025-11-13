@@ -43,8 +43,11 @@ public class AddressDaoImpl implements AddressDao {
                 if (rs.next()) address.setId(rs.getLong(1));
             }
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 
     @Override
@@ -66,8 +69,11 @@ public class AddressDaoImpl implements AddressDao {
                 return Optional.of(a);
             }
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 
     @Override
@@ -88,8 +94,11 @@ public class AddressDaoImpl implements AddressDao {
                 list.add(a);
             }
 
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
 
         return list;
     }
@@ -105,8 +114,11 @@ public class AddressDaoImpl implements AddressDao {
             ps.setString(4, address.getZip());
             ps.setLong(5, address.getId());
             ps.executeUpdate();
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 
     @Override
@@ -116,7 +128,10 @@ public class AddressDaoImpl implements AddressDao {
         try (PreparedStatement ps = c.prepareStatement(DELETE)) {
             ps.setLong(1, id);
             ps.executeUpdate();
-        } catch (SQLException e) { throw new RuntimeException(e); }
-        finally { pool.releaseConnection(c); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
     }
 }
