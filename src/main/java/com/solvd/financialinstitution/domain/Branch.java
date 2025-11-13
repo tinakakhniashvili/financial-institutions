@@ -11,6 +11,8 @@ import java.util.List;
 public class Branch {
     private Long id;
     private String code;
+    private Long bankId;
+    private Long addressId;
     private Address address;
     @XmlElementWrapper(name = "employees")
     @XmlElement(name = "employee")
@@ -33,6 +35,22 @@ public class Branch {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Long getBankId() {
+        return bankId;
+    }
+
+    public void setBankId(Long bankId) {
+        this.bankId = bankId;
+    }
+
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
 
     public Address getAddress() {
