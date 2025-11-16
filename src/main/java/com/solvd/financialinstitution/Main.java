@@ -12,7 +12,6 @@ import com.solvd.financialinstitution.persistence.impl.CustomerDaoImpl;
 import com.solvd.financialinstitution.service.CustomerService;
 import com.solvd.financialinstitution.service.impl.CustomerServiceImpl;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
@@ -22,21 +21,25 @@ public class Main {
             new XmlValidator().validate(xml, xsd);
             System.out.println("XML validated against XSD");
         }
+
         try (var is = Main.class.getResourceAsStream("/network.xml")) {
             var domParser = new XmlDomParser();
             FinancialNetwork net1 = domParser.parse(is);
             System.out.println("DOM banks: " + (net1.getBanks() == null ? 0 : net1.getBanks().size()));
         }
+
         try (var is = Main.class.getResourceAsStream("/network.xml")) {
             var saxParser = new XmlSaxParser();
             FinancialNetwork netSax = saxParser.parse(is);
             System.out.println("SAX banks: " + (netSax.getBanks() == null ? 0 : netSax.getBanks().size()));
         }
+
         try (var is = Main.class.getResourceAsStream("/network.xml")) {
             var jaxb = new JaxbReader();
             FinancialNetwork net2 = jaxb.read(is);
             System.out.println("JAXB first bank: " + net2.getBanks().get(0).getName());
         }
+
         var jsonReader = new JsonReader();
         try (var is = Main.class.getResourceAsStream("/network.json")) {
             FinancialNetwork net3 = jsonReader.read(is);
@@ -46,13 +49,6 @@ public class Main {
 
         CustomerDao customerDao = new CustomerDaoImpl();
         CustomerService customerService = new CustomerServiceImpl(customerDao);
-
-        Customer customer = new Customer();
-        customer.setFullName("Test User");
-        customer.setBirthDate(LocalDate.of(1990, 1, 1));
-
-        customerService.create(customer);
-        System.out.println("Created customer with id = " + customer.getId());
 
         List<Customer> customers = customerService.getAll();
         for (Customer c : customers) {

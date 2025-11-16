@@ -12,17 +12,19 @@ public class ConnectionPool {
     private static final Deque<Connection> pool = new ArrayDeque<>();
     private static ConnectionPool instance;
 
-    private static final String URL = "jdbc:mysql://localhost:3306/financial_institutions";
+    private static final String URL =
+            "jdbc:mysql://localhost:3306/financial_institutions?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "";
 
     private ConnectionPool() {
-        for (int i = 0; i < POOL_SIZE; i++) {
-            try {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            for (int i = 0; i < POOL_SIZE; i++) {
                 pool.add(DriverManager.getConnection(URL, USER, PASSWORD));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

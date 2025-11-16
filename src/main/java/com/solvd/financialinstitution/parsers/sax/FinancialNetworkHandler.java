@@ -19,7 +19,7 @@ import java.util.Deque;
 import java.util.List;
 
 public class FinancialNetworkHandler extends DefaultHandler {
-    private static final String MODEL_PKG = "com.solvd.financialinstitution.model.";
+    private static final String MODEL_PKG = "com.solvd.financialinstitution.domain.";
     private final StringBuilder text = new StringBuilder();
     private final Deque<Element> stack = new ArrayDeque<>();
     private Object root;
