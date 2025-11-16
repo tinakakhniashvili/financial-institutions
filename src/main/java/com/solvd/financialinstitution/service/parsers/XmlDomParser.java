@@ -1,4 +1,4 @@
-package com.solvd.financialinstitution.parsers;
+package com.solvd.financialinstitution.service.parsers;
 
 import com.solvd.financialinstitution.domain.*;
 import org.w3c.dom.Document;

@@ -2,7 +2,7 @@ package com.solvd.financialinstitution.persistence.impl;
 
 import com.solvd.financialinstitution.domain.Loan;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
-import com.solvd.financialinstitution.persistence.dao.LoanDao;
+import com.solvd.financialinstitution.persistence.LoanDao;
 
 import java.sql.*;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.solvd.financialinstitution.persistence.dao;
+package com.solvd.financialinstitution.persistence;
 
 import com.solvd.financialinstitution.domain.Account;
 

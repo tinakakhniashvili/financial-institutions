@@ -1,4 +1,4 @@
-package com.solvd.financialinstitution.parsers.sax;
+package com.solvd.financialinstitution.service.parsers.sax;
 
 import com.solvd.financialinstitution.domain.FinancialNetwork;
 

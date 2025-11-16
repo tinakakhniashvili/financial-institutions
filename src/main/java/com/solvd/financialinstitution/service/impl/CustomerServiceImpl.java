@@ -1,7 +1,7 @@
 package com.solvd.financialinstitution.service.impl;
 
 import com.solvd.financialinstitution.domain.Customer;
-import com.solvd.financialinstitution.persistence.dao.CustomerDao;
+import com.solvd.financialinstitution.persistence.CustomerDao;
 import com.solvd.financialinstitution.service.CustomerService;
 
 import java.util.List;

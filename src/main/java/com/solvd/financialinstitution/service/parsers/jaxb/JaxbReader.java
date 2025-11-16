@@ -1,4 +1,4 @@
-package com.solvd.financialinstitution.jaxb;
+package com.solvd.financialinstitution.service.parsers.jaxb;
 
 import com.solvd.financialinstitution.domain.FinancialNetwork;
 import jakarta.xml.bind.JAXBContext;

@@ -2,7 +2,7 @@ package com.solvd.financialinstitution.persistence.impl;
 
 import com.solvd.financialinstitution.domain.Branch;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
-import com.solvd.financialinstitution.persistence.dao.BranchDao;
+import com.solvd.financialinstitution.persistence.BranchDao;
 
 import java.sql.*;
 import java.util.ArrayList;

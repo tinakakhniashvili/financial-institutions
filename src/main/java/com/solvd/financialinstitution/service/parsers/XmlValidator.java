@@ -1,4 +1,4 @@
-package com.solvd.financialinstitution.parsers;
+package com.solvd.financialinstitution.service.parsers;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;

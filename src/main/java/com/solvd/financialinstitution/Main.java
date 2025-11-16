@@ -2,12 +2,12 @@ package com.solvd.financialinstitution;
 
 import com.solvd.financialinstitution.domain.Customer;
 import com.solvd.financialinstitution.domain.FinancialNetwork;
-import com.solvd.financialinstitution.jaxb.JaxbReader;
+import com.solvd.financialinstitution.service.parsers.jaxb.JaxbReader;
 import com.solvd.financialinstitution.json.JsonReader;
-import com.solvd.financialinstitution.parsers.XmlDomParser;
-import com.solvd.financialinstitution.parsers.XmlValidator;
-import com.solvd.financialinstitution.parsers.sax.XmlSaxParser;
-import com.solvd.financialinstitution.persistence.dao.CustomerDao;
+import com.solvd.financialinstitution.service.parsers.XmlDomParser;
+import com.solvd.financialinstitution.service.parsers.XmlValidator;
+import com.solvd.financialinstitution.service.parsers.sax.XmlSaxParser;
+import com.solvd.financialinstitution.persistence.CustomerDao;
 import com.solvd.financialinstitution.persistence.impl.CustomerDaoImpl;
 import com.solvd.financialinstitution.service.CustomerService;
 import com.solvd.financialinstitution.service.impl.CustomerServiceImpl;

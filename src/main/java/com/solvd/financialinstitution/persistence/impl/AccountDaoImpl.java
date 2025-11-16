@@ -3,7 +3,7 @@ package com.solvd.financialinstitution.persistence.impl;
 import com.solvd.financialinstitution.domain.Account;
 import com.solvd.financialinstitution.domain.AccountType;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
-import com.solvd.financialinstitution.persistence.dao.AccountDao;
+import com.solvd.financialinstitution.persistence.AccountDao;
 
 import java.sql.*;
 import java.util.ArrayList;

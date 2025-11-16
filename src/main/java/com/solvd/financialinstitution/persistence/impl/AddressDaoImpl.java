@@ -2,7 +2,7 @@ package com.solvd.financialinstitution.persistence.impl;
 
 import com.solvd.financialinstitution.domain.Address;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
-import com.solvd.financialinstitution.persistence.dao.AddressDao;
+import com.solvd.financialinstitution.persistence.AddressDao;
 
 import java.sql.*;
 import java.util.ArrayList;

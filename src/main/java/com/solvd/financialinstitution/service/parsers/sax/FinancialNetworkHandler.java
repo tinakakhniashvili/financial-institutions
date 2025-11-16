@@ -1,4 +1,4 @@
-package com.solvd.financialinstitution.parsers.sax;
+package com.solvd.financialinstitution.service.parsers.sax;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
