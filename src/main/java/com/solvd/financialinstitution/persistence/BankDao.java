@@ -16,4 +16,8 @@ public interface BankDao {
     void update(Bank bank);
 
     void delete(long id);
+
+    Optional<Bank> findByIdWithBranchesAndAddresses(long id);
+
+    List<Bank> findAllWithBranchesAndAddresses();
 }

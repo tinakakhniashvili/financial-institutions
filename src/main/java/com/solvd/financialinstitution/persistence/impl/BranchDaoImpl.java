@@ -4,7 +4,11 @@ import com.solvd.financialinstitution.domain.Branch;
 import com.solvd.financialinstitution.persistence.BranchDao;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,9 +29,6 @@ public class BranchDaoImpl implements BranchDao {
 
     private static final String DELETE =
             "DELETE FROM branch WHERE ID = ?";
-
-    private static final String SELECT_BY_BANK_ID =
-            "SELECT ID, BANK_ID, ADDRESS_ID, CODE FROM branch WHERE BANK_ID = ?";
 
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
@@ -127,33 +128,5 @@ public class BranchDaoImpl implements BranchDao {
         } finally {
             pool.releaseConnection(c);
         }
-    }
-
-    @Override
-    public List<Branch> findByBankId(long bankId) {
-        List<Branch> list = new ArrayList<>();
-        Connection c = pool.getConnection();
-
-        try (PreparedStatement ps = c.prepareStatement(SELECT_BY_BANK_ID)) {
-            ps.setLong(1, bankId);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Branch br = new Branch();
-                    br.setId(rs.getLong("ID"));
-                    br.setBankId(rs.getLong("BANK_ID"));
-                    br.setAddressId(rs.getLong("ADDRESS_ID"));
-                    br.setCode(rs.getString("CODE"));
-                    list.add(br);
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            pool.releaseConnection(c);
-        }
-
-        return list;
     }
 }

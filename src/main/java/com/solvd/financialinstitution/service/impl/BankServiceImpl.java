@@ -88,23 +88,11 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public Optional<Bank> getByIdWithBranchesAndAddresses(long id) {
-        Optional<Bank> bankOpt = bankDao.findById(id);
-        if (bankOpt.isEmpty()) {
-            return bankOpt;
-        }
+        return bankDao.findByIdWithBranchesAndAddresses(id);
+    }
 
-        Bank bank = bankOpt.get();
-
-        List<Branch> branches = branchDao.findByBankId(id);
-
-        for (Branch branch : branches) {
-            if (branch.getAddressId() != null) {
-                addressDao.findById(branch.getAddressId())
-                        .ifPresent(branch::setAddress);
-            }
-        }
-
-        bank.setBranches(branches);
-        return Optional.of(bank);
+    @Override
+    public List<Bank> getAllWithBranchesAndAddresses() {
+        return bankDao.findAllWithBranchesAndAddresses();
     }
 }

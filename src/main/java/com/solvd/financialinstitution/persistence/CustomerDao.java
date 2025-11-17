@@ -17,5 +17,7 @@ public interface CustomerDao {
 
     void delete(long id);
 
+    Optional<Customer> findByIdWithAccountsAndLoans(long id);
+
     List<Customer> findByCity(String city);
 }

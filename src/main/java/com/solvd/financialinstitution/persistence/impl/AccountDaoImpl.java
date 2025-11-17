@@ -5,7 +5,13 @@ import com.solvd.financialinstitution.domain.AccountType;
 import com.solvd.financialinstitution.persistence.AccountDao;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,9 +47,9 @@ public class AccountDaoImpl implements AccountDao {
         Connection c = pool.getConnection();
         try (PreparedStatement ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setLong(1, 0L);
-            ps.setLong(2, 0L);
-            ps.setLong(3, a.getType() != null ? a.getType().getId() : 0L);
+            ps.setLong(1, 0);
+            ps.setLong(2, 0);
+            ps.setLong(3, a.getType() != null ? a.getType().getId() : 0);
             ps.setString(4, a.getIban());
             ps.setBigDecimal(5, a.getBalance());
             if (a.getOpenedOn() != null)
@@ -74,7 +80,18 @@ public class AccountDaoImpl implements AccountDao {
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) return Optional.empty();
 
-                Account a = mapAccount(rs);
+                Account a = new Account();
+                a.setId(rs.getLong("ID"));
+                a.setIban(rs.getString("IBAN"));
+                a.setBalance(rs.getBigDecimal("BALANCE"));
+
+                Date date = rs.getDate("OPENED_ON");
+                if (date != null) a.setOpenedOn(date.toLocalDate());
+
+                AccountType type = new AccountType();
+                type.setId(rs.getLong("ACCOUNT_TYPE_ID"));
+                a.setType(type);
+
                 return Optional.of(a);
             }
 
@@ -94,7 +111,19 @@ public class AccountDaoImpl implements AccountDao {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                list.add(mapAccount(rs));
+                Account a = new Account();
+                a.setId(rs.getLong("ID"));
+                a.setIban(rs.getString("IBAN"));
+                a.setBalance(rs.getBigDecimal("BALANCE"));
+
+                Date date = rs.getDate("OPENED_ON");
+                if (date != null) a.setOpenedOn(date.toLocalDate());
+
+                AccountType type = new AccountType();
+                type.setId(rs.getLong("ACCOUNT_TYPE_ID"));
+                a.setType(type);
+
+                list.add(a);
             }
 
         } catch (SQLException e) {
@@ -111,9 +140,9 @@ public class AccountDaoImpl implements AccountDao {
         Connection c = pool.getConnection();
         try (PreparedStatement ps = c.prepareStatement(UPDATE)) {
 
-            ps.setLong(1, 0L);
-            ps.setLong(2, 0L);
-            ps.setLong(3, a.getType() != null ? a.getType().getId() : 0L);
+            ps.setLong(1, 0);
+            ps.setLong(2, 0);
+            ps.setLong(3, a.getType() != null ? a.getType().getId() : 0);
             ps.setString(4, a.getIban());
             ps.setBigDecimal(5, a.getBalance());
             if (a.getOpenedOn() != null)
@@ -155,7 +184,19 @@ public class AccountDaoImpl implements AccountDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    list.add(mapAccount(rs));
+                    Account a = new Account();
+                    a.setId(rs.getLong("ID"));
+                    a.setIban(rs.getString("IBAN"));
+                    a.setBalance(rs.getBigDecimal("BALANCE"));
+
+                    Date date = rs.getDate("OPENED_ON");
+                    if (date != null) a.setOpenedOn(date.toLocalDate());
+
+                    AccountType type = new AccountType();
+                    type.setId(rs.getLong("ACCOUNT_TYPE_ID"));
+                    a.setType(type);
+
+                    list.add(a);
                 }
             }
 
@@ -166,21 +207,5 @@ public class AccountDaoImpl implements AccountDao {
         }
 
         return list;
-    }
-
-    private Account mapAccount(ResultSet rs) throws SQLException {
-        Account a = new Account();
-        a.setId(rs.getLong("ID"));
-        a.setIban(rs.getString("IBAN"));
-        a.setBalance(rs.getBigDecimal("BALANCE"));
-
-        Date date = rs.getDate("OPENED_ON");
-        if (date != null) a.setOpenedOn(date.toLocalDate());
-
-        AccountType type = new AccountType();
-        type.setId(rs.getLong("ACCOUNT_TYPE_ID"));
-        a.setType(type);
-
-        return a;
     }
 }

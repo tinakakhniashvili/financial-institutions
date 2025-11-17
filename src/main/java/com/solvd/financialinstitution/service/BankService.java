@@ -20,4 +20,6 @@ public interface BankService {
     Bank createWithBranchesAndAddresses(Bank bank);
 
     Optional<Bank> getByIdWithBranchesAndAddresses(long id);
+
+    List<Bank> getAllWithBranchesAndAddresses();
 }

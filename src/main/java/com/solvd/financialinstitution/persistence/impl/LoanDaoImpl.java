@@ -4,7 +4,13 @@ import com.solvd.financialinstitution.domain.Loan;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
 import com.solvd.financialinstitution.persistence.LoanDao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +46,8 @@ public class LoanDaoImpl implements LoanDao {
         Connection c = pool.getConnection();
         try (PreparedStatement ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setLong(1, 0L);
-            ps.setLong(2, 0L);
+            ps.setLong(1, 0);
+            ps.setLong(2, 0);
             ps.setBigDecimal(3, l.getPrincipal());
             ps.setBigDecimal(4, l.getRate());
 
@@ -75,7 +81,17 @@ public class LoanDaoImpl implements LoanDao {
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) return Optional.empty();
 
-                Loan l = mapLoan(rs);
+                Loan l = new Loan();
+                l.setId(rs.getLong("ID"));
+                l.setPrincipal(rs.getBigDecimal("PRINCIPAL"));
+                l.setRate(rs.getBigDecimal("RATE"));
+
+                Date d1 = rs.getDate("START_DATE");
+                if (d1 != null) l.setStart(d1.toLocalDate());
+
+                Date d2 = rs.getDate("END_DATE");
+                if (d2 != null) l.setEnd(d2.toLocalDate());
+
                 return Optional.of(l);
             }
 
@@ -95,7 +111,18 @@ public class LoanDaoImpl implements LoanDao {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                list.add(mapLoan(rs));
+                Loan l = new Loan();
+                l.setId(rs.getLong("ID"));
+                l.setPrincipal(rs.getBigDecimal("PRINCIPAL"));
+                l.setRate(rs.getBigDecimal("RATE"));
+
+                Date d1 = rs.getDate("START_DATE");
+                if (d1 != null) l.setStart(d1.toLocalDate());
+
+                Date d2 = rs.getDate("END_DATE");
+                if (d2 != null) l.setEnd(d2.toLocalDate());
+
+                list.add(l);
             }
 
         } catch (SQLException e) {
@@ -112,8 +139,8 @@ public class LoanDaoImpl implements LoanDao {
         Connection c = pool.getConnection();
         try (PreparedStatement ps = c.prepareStatement(UPDATE)) {
 
-            ps.setLong(1, 0L);
-            ps.setLong(2, 0L);
+            ps.setLong(1, 0);
+            ps.setLong(2, 0);
             ps.setBigDecimal(3, l.getPrincipal());
             ps.setBigDecimal(4, l.getRate());
 
@@ -159,7 +186,22 @@ public class LoanDaoImpl implements LoanDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    list.add(mapLoan(rs));
+                    Loan l = new Loan();
+                    l.setId(rs.getLong("ID"));
+                    l.setPrincipal(rs.getBigDecimal("PRINCIPAL"));
+                    l.setRate(rs.getBigDecimal("RATE"));
+
+                    Date d1 = rs.getDate("START_DATE");
+                    if (d1 != null) {
+                        l.setStart(d1.toLocalDate());
+                    }
+
+                    Date d2 = rs.getDate("END_DATE");
+                    if (d2 != null) {
+                        l.setEnd(d2.toLocalDate());
+                    }
+
+                    list.add(l);
                 }
             }
 
@@ -170,20 +212,5 @@ public class LoanDaoImpl implements LoanDao {
         }
 
         return list;
-    }
-
-    private Loan mapLoan(ResultSet rs) throws SQLException {
-        Loan l = new Loan();
-        l.setId(rs.getLong("ID"));
-        l.setPrincipal(rs.getBigDecimal("PRINCIPAL"));
-        l.setRate(rs.getBigDecimal("RATE"));
-
-        Date d1 = rs.getDate("START_DATE");
-        if (d1 != null) l.setStart(d1.toLocalDate());
-
-        Date d2 = rs.getDate("END_DATE");
-        if (d2 != null) l.setEnd(d2.toLocalDate());
-
-        return l;
     }
 }
