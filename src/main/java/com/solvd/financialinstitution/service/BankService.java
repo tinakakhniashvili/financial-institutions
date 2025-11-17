@@ -16,4 +16,6 @@ public interface BankService {
     void update(Bank bank);
 
     void delete(long id);
+
+    Bank createWithBranchesAndAddresses(Bank bank);
 }
