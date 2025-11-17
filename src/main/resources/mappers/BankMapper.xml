@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.financialinstitution.persistence.BankDao">
+    <resultMap id="BankResultMap" type="com.solvd.financialinstitution.domain.Bank">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="active" column="ACTIVE"/>
+    </resultMap>
+
+    <insert id="create"
+            parameterType="com.solvd.financialinstitution.domain.Bank"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO bank (NAME, ACTIVE, FINANCIAL_NETWORK_ID)
+        VALUES (#{name}, #{active}, NULL)
+    </insert>
+
+    <select id="findById"
+            parameterType="long"
+            resultMap="BankResultMap">
+        SELECT ID, NAME, ACTIVE
+        FROM bank
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAll"
+            resultMap="BankResultMap">
+        SELECT ID, NAME, ACTIVE
+        FROM bank
+    </select>
+
+    <update id="update"
+            parameterType="com.solvd.financialinstitution.domain.Bank">
+        UPDATE bank
+        SET NAME = #{name},
+        ACTIVE = #{active}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="delete"
+            parameterType="long">
+        DELETE FROM bank
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="findByIdWithBranchesAndAddresses"
+            parameterType="long"
+            resultMap="BankResultMap">
+        SELECT ID, NAME, ACTIVE
+        FROM bank
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAllWithBranchesAndAddresses"
+            resultMap="BankResultMap">
+        SELECT ID, NAME, ACTIVE
+        FROM bank
+    </select>
+</mapper>

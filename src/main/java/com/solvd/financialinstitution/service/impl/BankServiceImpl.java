@@ -7,6 +7,7 @@ import com.solvd.financialinstitution.persistence.AddressDao;
 import com.solvd.financialinstitution.persistence.BankDao;
 import com.solvd.financialinstitution.persistence.BranchDao;
 import com.solvd.financialinstitution.persistence.impl.AddressDaoImpl;
+import com.solvd.financialinstitution.persistence.impl.BankMyBatisDaoImpl;
 import com.solvd.financialinstitution.persistence.impl.BranchDaoImpl;
 import com.solvd.financialinstitution.service.BankService;
 
@@ -18,6 +19,10 @@ public class BankServiceImpl implements BankService {
     private final BankDao bankDao;
     private final BranchDao branchDao;
     private final AddressDao addressDao;
+
+    public BankServiceImpl() {
+        this(new BankMyBatisDaoImpl());
+    }
 
     public BankServiceImpl(BankDao bankDao) {
         this(bankDao, new BranchDaoImpl(), new AddressDaoImpl());
