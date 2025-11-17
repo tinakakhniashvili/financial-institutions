@@ -27,6 +27,12 @@ public class CustomerDaoImpl implements CustomerDao {
     private static final String DELETE =
             "DELETE FROM customer WHERE id = ?";
 
+    private static final String SELECT_BY_CITY =
+            "SELECT c.id, c.full_name, c.birth_date " +
+                    "FROM customer c " +
+                    "JOIN address a ON c.ADDRESS_ID = a.ID " +
+                    "WHERE a.CITY = ?";
+
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
@@ -145,5 +151,37 @@ public class CustomerDaoImpl implements CustomerDao {
         } finally {
             pool.releaseConnection(c);
         }
+    }
+
+    @Override
+    public List<Customer> findByCity(String city) {
+        List<Customer> customers = new ArrayList<>();
+        Connection c = pool.getConnection();
+
+        try (PreparedStatement ps = c.prepareStatement(SELECT_BY_CITY)) {
+            ps.setString(1, city);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Customer customer = new Customer();
+                    customer.setId(rs.getLong("id"));
+                    customer.setFullName(rs.getString("full_name"));
+
+                    Date date = rs.getDate("birth_date");
+                    if (date != null) {
+                        customer.setBirthDate(date.toLocalDate());
+                    }
+
+                    customers.add(customer);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
+
+        return customers;
     }
 }

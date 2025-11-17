@@ -16,4 +16,6 @@ public interface BranchDao {
     void update(Branch branch);
 
     void delete(long id);
+
+    List<Branch> findByBankId(long bankId);
 }

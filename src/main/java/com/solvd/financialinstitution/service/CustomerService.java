@@ -16,4 +16,8 @@ public interface CustomerService {
     void update(Customer customer);
 
     void delete(long id);
+
+    Optional<Customer> getByIdWithAccountsAndLoans(long id);
+
+    List<Customer> getByCity(String city);
 }

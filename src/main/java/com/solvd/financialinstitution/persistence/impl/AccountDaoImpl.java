@@ -2,8 +2,8 @@ package com.solvd.financialinstitution.persistence.impl;
 
 import com.solvd.financialinstitution.domain.Account;
 import com.solvd.financialinstitution.domain.AccountType;
-import com.solvd.financialinstitution.persistence.ConnectionPool;
 import com.solvd.financialinstitution.persistence.AccountDao;
+import com.solvd.financialinstitution.persistence.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,6 +30,10 @@ public class AccountDaoImpl implements AccountDao {
     private static final String DELETE =
             "DELETE FROM account WHERE ID = ?";
 
+    private static final String SELECT_BY_CUSTOMER_ID =
+            "SELECT ID, CUSTOMER_ID, BRANCH_ID, ACCOUNT_TYPE_ID, IBAN, BALANCE, OPENED_ON " +
+                    "FROM account WHERE CUSTOMER_ID = ?";
+
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
@@ -37,9 +41,9 @@ public class AccountDaoImpl implements AccountDao {
         Connection c = pool.getConnection();
         try (PreparedStatement ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setLong(1, a.getId()); // customerId is NOT in your model → not used
-            ps.setLong(2, 0);         // branchId not in model
-            ps.setLong(3, a.getType() != null ? a.getType().getId() : 0);
+            ps.setLong(1, 0L);
+            ps.setLong(2, 0L);
+            ps.setLong(3, a.getType() != null ? a.getType().getId() : 0L);
             ps.setString(4, a.getIban());
             ps.setBigDecimal(5, a.getBalance());
             if (a.getOpenedOn() != null)
@@ -70,18 +74,7 @@ public class AccountDaoImpl implements AccountDao {
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) return Optional.empty();
 
-                Account a = new Account();
-                a.setId(rs.getLong("ID"));
-                a.setIban(rs.getString("IBAN"));
-                a.setBalance(rs.getBigDecimal("BALANCE"));
-
-                Date date = rs.getDate("OPENED_ON");
-                if (date != null) a.setOpenedOn(date.toLocalDate());
-
-                AccountType type = new AccountType();
-                type.setId(rs.getLong("ACCOUNT_TYPE_ID"));
-                a.setType(type);
-
+                Account a = mapAccount(rs);
                 return Optional.of(a);
             }
 
@@ -101,19 +94,7 @@ public class AccountDaoImpl implements AccountDao {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Account a = new Account();
-                a.setId(rs.getLong("ID"));
-                a.setIban(rs.getString("IBAN"));
-                a.setBalance(rs.getBigDecimal("BALANCE"));
-
-                Date date = rs.getDate("OPENED_ON");
-                if (date != null) a.setOpenedOn(date.toLocalDate());
-
-                AccountType type = new AccountType();
-                type.setId(rs.getLong("ACCOUNT_TYPE_ID"));
-                a.setType(type);
-
-                list.add(a);
+                list.add(mapAccount(rs));
             }
 
         } catch (SQLException e) {
@@ -130,9 +111,9 @@ public class AccountDaoImpl implements AccountDao {
         Connection c = pool.getConnection();
         try (PreparedStatement ps = c.prepareStatement(UPDATE)) {
 
-            ps.setLong(1, a.getId());
-            ps.setLong(2, 0);
-            ps.setLong(3, a.getType() != null ? a.getType().getId() : 0);
+            ps.setLong(1, 0L);
+            ps.setLong(2, 0L);
+            ps.setLong(3, a.getType() != null ? a.getType().getId() : 0L);
             ps.setString(4, a.getIban());
             ps.setBigDecimal(5, a.getBalance());
             if (a.getOpenedOn() != null)
@@ -162,5 +143,44 @@ public class AccountDaoImpl implements AccountDao {
         } finally {
             pool.releaseConnection(c);
         }
+    }
+
+    @Override
+    public List<Account> findByCustomerId(long customerId) {
+        List<Account> list = new ArrayList<>();
+        Connection c = pool.getConnection();
+
+        try (PreparedStatement ps = c.prepareStatement(SELECT_BY_CUSTOMER_ID)) {
+            ps.setLong(1, customerId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapAccount(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
+
+        return list;
+    }
+
+    private Account mapAccount(ResultSet rs) throws SQLException {
+        Account a = new Account();
+        a.setId(rs.getLong("ID"));
+        a.setIban(rs.getString("IBAN"));
+        a.setBalance(rs.getBigDecimal("BALANCE"));
+
+        Date date = rs.getDate("OPENED_ON");
+        if (date != null) a.setOpenedOn(date.toLocalDate());
+
+        AccountType type = new AccountType();
+        type.setId(rs.getLong("ACCOUNT_TYPE_ID"));
+        a.setType(type);
+
+        return a;
     }
 }

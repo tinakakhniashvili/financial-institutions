@@ -39,4 +39,9 @@ public class LoanServiceImpl implements LoanService {
     public void delete(long id) {
         loanDao.delete(id);
     }
+
+    @Override
+    public List<Loan> getByCustomerId(long customerId) {
+        return loanDao.findByCustomerId(customerId);
+    }
 }

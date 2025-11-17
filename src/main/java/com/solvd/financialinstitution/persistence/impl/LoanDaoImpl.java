@@ -29,6 +29,10 @@ public class LoanDaoImpl implements LoanDao {
     private static final String DELETE =
             "DELETE FROM loan WHERE ID = ?";
 
+    private static final String SELECT_BY_CUSTOMER_ID =
+            "SELECT ID, CUSTOMER_ID, BRANCH_ID, PRINCIPAL, RATE, START_DATE, END_DATE " +
+                    "FROM loan WHERE CUSTOMER_ID = ?";
+
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
@@ -36,8 +40,8 @@ public class LoanDaoImpl implements LoanDao {
         Connection c = pool.getConnection();
         try (PreparedStatement ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setLong(1, 0); // no customerId in model
-            ps.setLong(2, 0); // no branchId in model
+            ps.setLong(1, 0L);
+            ps.setLong(2, 0L);
             ps.setBigDecimal(3, l.getPrincipal());
             ps.setBigDecimal(4, l.getRate());
 
@@ -71,17 +75,7 @@ public class LoanDaoImpl implements LoanDao {
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) return Optional.empty();
 
-                Loan l = new Loan();
-                l.setId(rs.getLong("ID"));
-                l.setPrincipal(rs.getBigDecimal("PRINCIPAL"));
-                l.setRate(rs.getBigDecimal("RATE"));
-
-                Date d1 = rs.getDate("START_DATE");
-                if (d1 != null) l.setStart(d1.toLocalDate());
-
-                Date d2 = rs.getDate("END_DATE");
-                if (d2 != null) l.setEnd(d2.toLocalDate());
-
+                Loan l = mapLoan(rs);
                 return Optional.of(l);
             }
 
@@ -101,18 +95,7 @@ public class LoanDaoImpl implements LoanDao {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Loan l = new Loan();
-                l.setId(rs.getLong("ID"));
-                l.setPrincipal(rs.getBigDecimal("PRINCIPAL"));
-                l.setRate(rs.getBigDecimal("RATE"));
-
-                Date d1 = rs.getDate("START_DATE");
-                if (d1 != null) l.setStart(d1.toLocalDate());
-
-                Date d2 = rs.getDate("END_DATE");
-                if (d2 != null) l.setEnd(d2.toLocalDate());
-
-                list.add(l);
+                list.add(mapLoan(rs));
             }
 
         } catch (SQLException e) {
@@ -129,8 +112,8 @@ public class LoanDaoImpl implements LoanDao {
         Connection c = pool.getConnection();
         try (PreparedStatement ps = c.prepareStatement(UPDATE)) {
 
-            ps.setLong(1, 0);
-            ps.setLong(2, 0);
+            ps.setLong(1, 0L);
+            ps.setLong(2, 0L);
             ps.setBigDecimal(3, l.getPrincipal());
             ps.setBigDecimal(4, l.getRate());
 
@@ -164,5 +147,43 @@ public class LoanDaoImpl implements LoanDao {
         } finally {
             pool.releaseConnection(c);
         }
+    }
+
+    @Override
+    public List<Loan> findByCustomerId(long customerId) {
+        List<Loan> list = new ArrayList<>();
+        Connection c = pool.getConnection();
+
+        try (PreparedStatement ps = c.prepareStatement(SELECT_BY_CUSTOMER_ID)) {
+            ps.setLong(1, customerId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapLoan(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            pool.releaseConnection(c);
+        }
+
+        return list;
+    }
+
+    private Loan mapLoan(ResultSet rs) throws SQLException {
+        Loan l = new Loan();
+        l.setId(rs.getLong("ID"));
+        l.setPrincipal(rs.getBigDecimal("PRINCIPAL"));
+        l.setRate(rs.getBigDecimal("RATE"));
+
+        Date d1 = rs.getDate("START_DATE");
+        if (d1 != null) l.setStart(d1.toLocalDate());
+
+        Date d2 = rs.getDate("END_DATE");
+        if (d2 != null) l.setEnd(d2.toLocalDate());
+
+        return l;
     }
 }

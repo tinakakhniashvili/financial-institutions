@@ -16,4 +16,6 @@ public interface CustomerDao {
     void update(Customer customer);
 
     void delete(long id);
+
+    List<Customer> findByCity(String city);
 }

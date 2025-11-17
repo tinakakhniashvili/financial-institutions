@@ -16,4 +16,6 @@ public interface LoanDao {
     void update(Loan loan);
 
     void delete(long id);
+
+    List<Loan> findByCustomerId(long customerId);
 }

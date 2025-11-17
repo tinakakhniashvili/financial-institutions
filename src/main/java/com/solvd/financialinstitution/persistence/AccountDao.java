@@ -16,4 +16,6 @@ public interface AccountDao {
     void update(Account account);
 
     void delete(long id);
+
+    List<Account> findByCustomerId(long customerId);
 }

@@ -16,4 +16,6 @@ public interface LoanService {
     void update(Loan loan);
 
     void delete(long id);
+
+    List<Loan> getByCustomerId(long customerId);
 }
