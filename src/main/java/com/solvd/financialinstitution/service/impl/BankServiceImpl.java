@@ -1,15 +1,11 @@
 package com.solvd.financialinstitution.service.impl;
 
-import com.solvd.financialinstitution.domain.Address;
 import com.solvd.financialinstitution.domain.Bank;
 import com.solvd.financialinstitution.domain.Branch;
-import com.solvd.financialinstitution.persistence.AddressDao;
 import com.solvd.financialinstitution.persistence.BankDao;
-import com.solvd.financialinstitution.persistence.BranchDao;
-import com.solvd.financialinstitution.persistence.impl.AddressDaoImpl;
 import com.solvd.financialinstitution.persistence.impl.BankMyBatisDaoImpl;
-import com.solvd.financialinstitution.persistence.impl.BranchDaoImpl;
 import com.solvd.financialinstitution.service.BankService;
+import com.solvd.financialinstitution.service.BranchService;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,21 +13,19 @@ import java.util.Optional;
 public class BankServiceImpl implements BankService {
 
     private final BankDao bankDao;
-    private final BranchDao branchDao;
-    private final AddressDao addressDao;
+    private final BranchService branchService;
 
     public BankServiceImpl() {
-        this(new BankMyBatisDaoImpl());
+        this(new BankMyBatisDaoImpl(), new BranchServiceImpl());
     }
 
     public BankServiceImpl(BankDao bankDao) {
-        this(bankDao, new BranchDaoImpl(), new AddressDaoImpl());
+        this(bankDao, new BranchServiceImpl());
     }
 
-    public BankServiceImpl(BankDao bankDao, BranchDao branchDao, AddressDao addressDao) {
+    public BankServiceImpl(BankDao bankDao, BranchService branchService) {
         this.bankDao = bankDao;
-        this.branchDao = branchDao;
-        this.addressDao = addressDao;
+        this.branchService = branchService;
     }
 
     @Override
@@ -76,16 +70,8 @@ public class BankServiceImpl implements BankService {
             if (branch == null) {
                 continue;
             }
-
             branch.setBankId(bank.getId());
-
-            Address branchAddress = branch.getAddress();
-            if (branchAddress != null) {
-                addressDao.create(branchAddress);
-                branch.setAddressId(branchAddress.getId());
-            }
-
-            branchDao.create(branch);
+            branchService.create(branch);
         }
 
         return bank;

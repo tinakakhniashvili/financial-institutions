@@ -3,7 +3,7 @@ package com.solvd.financialinstitution;
 import com.solvd.financialinstitution.domain.Bank;
 import com.solvd.financialinstitution.domain.Customer;
 import com.solvd.financialinstitution.domain.FinancialNetwork;
-import com.solvd.financialinstitution.json.JsonReader;
+import com.solvd.financialinstitution.service.parsers.json.JsonReader;
 import com.solvd.financialinstitution.persistence.BankDao;
 import com.solvd.financialinstitution.persistence.CustomerDao;
 import com.solvd.financialinstitution.persistence.impl.BankDaoImpl;
