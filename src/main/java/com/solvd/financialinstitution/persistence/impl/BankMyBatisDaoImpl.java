@@ -3,6 +3,7 @@ package com.solvd.financialinstitution.persistence.impl;
 import com.solvd.financialinstitution.domain.Bank;
 import com.solvd.financialinstitution.persistence.BankDao;
 import com.solvd.financialinstitution.persistence.MyBatisUtil;
+import com.solvd.financialinstitution.persistence.mybatis.BankMapper;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class BankMyBatisDaoImpl implements BankDao {
     @Override
     public void create(Bank bank) {
         try (SqlSession session = MyBatisUtil.getSqlSessionFactory().openSession()) {
-            BankDao mapper = session.getMapper(BankDao.class);
+            BankMapper mapper = session.getMapper(BankMapper.class);
             mapper.create(bank);
             session.commit();
         }
@@ -22,7 +23,7 @@ public class BankMyBatisDaoImpl implements BankDao {
     @Override
     public Optional<Bank> findById(long id) {
         try (SqlSession session = MyBatisUtil.getSqlSessionFactory().openSession()) {
-            BankDao mapper = session.getMapper(BankDao.class);
+            BankMapper mapper = session.getMapper(BankMapper.class);
             Bank bank = mapper.findById(id);
             return Optional.ofNullable(bank);
         }
@@ -31,7 +32,7 @@ public class BankMyBatisDaoImpl implements BankDao {
     @Override
     public List<Bank> findAll() {
         try (SqlSession session = MyBatisUtil.getSqlSessionFactory().openSession()) {
-            BankDao mapper = session.getMapper(BankDao.class);
+            BankMapper mapper = session.getMapper(BankMapper.class);
             return mapper.findAll();
         }
     }
@@ -39,7 +40,7 @@ public class BankMyBatisDaoImpl implements BankDao {
     @Override
     public void update(Bank bank) {
         try (SqlSession session = MyBatisUtil.getSqlSessionFactory().openSession()) {
-            BankDao mapper = session.getMapper(BankDao.class);
+            BankMapper mapper = session.getMapper(BankMapper.class);
             mapper.update(bank);
             session.commit();
         }
@@ -48,7 +49,7 @@ public class BankMyBatisDaoImpl implements BankDao {
     @Override
     public void delete(long id) {
         try (SqlSession session = MyBatisUtil.getSqlSessionFactory().openSession()) {
-            BankDao mapper = session.getMapper(BankDao.class);
+            BankMapper mapper = session.getMapper(BankMapper.class);
             mapper.delete(id);
             session.commit();
         }
@@ -57,7 +58,7 @@ public class BankMyBatisDaoImpl implements BankDao {
     @Override
     public Optional<Bank> findByIdWithBranchesAndAddresses(long id) {
         try (SqlSession session = MyBatisUtil.getSqlSessionFactory().openSession()) {
-            BankDao mapper = session.getMapper(BankDao.class);
+            BankMapper mapper = session.getMapper(BankMapper.class);
             Bank bank = mapper.findByIdWithBranchesAndAddresses(id);
             return Optional.ofNullable(bank);
         }
@@ -66,7 +67,7 @@ public class BankMyBatisDaoImpl implements BankDao {
     @Override
     public List<Bank> findAllWithBranchesAndAddresses() {
         try (SqlSession session = MyBatisUtil.getSqlSessionFactory().openSession()) {
-            BankDao mapper = session.getMapper(BankDao.class);
+            BankMapper mapper = session.getMapper(BankMapper.class);
             return mapper.findAllWithBranchesAndAddresses();
         }
     }
