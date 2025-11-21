@@ -1,25 +1,28 @@
 package com.solvd.financialinstitution;
 
-import com.solvd.financialinstitution.domain.Bank;
-import com.solvd.financialinstitution.domain.Customer;
-import com.solvd.financialinstitution.domain.FinancialNetwork;
-import com.solvd.financialinstitution.persistence.BankDao;
-import com.solvd.financialinstitution.persistence.CustomerDao;
-import com.solvd.financialinstitution.persistence.impl.BankDaoImpl;
-import com.solvd.financialinstitution.persistence.impl.CustomerDaoImpl;
+import com.solvd.financialinstitution.facade.BankingFacade;
+import com.solvd.financialinstitution.listener.LoggingLoanCreatedListener;
+import com.solvd.financialinstitution.persistence.factory.DaoFactory;
+import com.solvd.financialinstitution.persistence.factory.DaoFactories;
+import com.solvd.financialinstitution.service.AddressService;
 import com.solvd.financialinstitution.service.BankService;
+import com.solvd.financialinstitution.service.BranchService;
 import com.solvd.financialinstitution.service.CustomerService;
+import com.solvd.financialinstitution.service.LoanService;
+import com.solvd.financialinstitution.service.decorator.LoggingLoanServiceDecorator;
+import com.solvd.financialinstitution.service.impl.AddressServiceImpl;
 import com.solvd.financialinstitution.service.impl.BankServiceImpl;
+import com.solvd.financialinstitution.service.impl.BranchServiceImpl;
 import com.solvd.financialinstitution.service.impl.CustomerServiceImpl;
+import com.solvd.financialinstitution.service.impl.LoanServiceImpl;
 import com.solvd.financialinstitution.service.parsers.XmlDomParser;
 import com.solvd.financialinstitution.service.parsers.XmlValidator;
 import com.solvd.financialinstitution.service.parsers.jaxb.JaxbReader;
 import com.solvd.financialinstitution.service.parsers.json.JsonReader;
 import com.solvd.financialinstitution.service.parsers.sax.XmlSaxParser;
+import com.solvd.financialinstitution.service.proxy.SecurityBankServiceProxy;
 
 import java.io.InputStream;
-import java.util.List;
-import java.util.Optional;
 
 public class Main {
 
@@ -28,27 +31,55 @@ public class Main {
         demoXmlParsers();
         demoJsonParsers();
 
-        BankService bankService = createBankService();
-        CustomerService customerService = createCustomerService();
+        DaoFactory daoFactory = DaoFactories.create("mybatis");
 
-        importNetworkFromJson(bankService);
-        printAllCustomers(customerService);
-        demoAdvancedServiceMethods(bankService, customerService);
-    }
+        AddressService addressService =
+                new AddressServiceImpl(daoFactory.createAddressDao());
+        BranchService branchService =
+                new BranchServiceImpl(daoFactory.createBranchDao(), addressService);
 
-    private static BankService createBankService() {
-        BankDao bankDao = new BankDaoImpl();
-        return new BankServiceImpl(bankDao);
-    }
+        BankService coreBankService =
+                new BankServiceImpl(daoFactory.createBankDao(), branchService);
+        BankService bankService =
+                new SecurityBankServiceProxy(coreBankService, false);
 
-    private static CustomerService createCustomerService() {
-        CustomerDao customerDao = new CustomerDaoImpl();
-        return new CustomerServiceImpl(customerDao);
+        CustomerService customerService =
+                new CustomerServiceImpl(daoFactory.createCustomerDao());
+
+        LoanService coreLoanService =
+                new LoanServiceImpl(daoFactory.createLoanDao());
+        LoanService loanService =
+                new LoggingLoanServiceDecorator(coreLoanService);
+        loanService.addLoanCreatedListener(new LoggingLoanCreatedListener());
+
+        BankingFacade facade = new BankingFacade(
+                bankService,
+                customerService,
+                branchService,
+                addressService,
+                loanService
+        );
+
+        try (InputStream is = Main.class.getResourceAsStream("/network.json")) {
+            if (is != null) {
+                facade.importNetworkFromJson(is);
+            } else {
+                System.out.println("network.json not found on classpath, skipping DB import.");
+            }
+        }
+
+        facade.printAllCustomers();
+        facade.demoAdvancedServiceMethods();
     }
 
     private static void validateXml() throws Exception {
         try (InputStream xml = Main.class.getResourceAsStream("/network.xml");
              InputStream xsd = Main.class.getResourceAsStream("/network.xsd")) {
+
+            if (xml == null || xsd == null) {
+                System.out.println("XML or XSD not found, skipping validation");
+                return;
+            }
 
             new XmlValidator().validate(xml, xsd);
             System.out.println("XML validated against XSD");
@@ -57,31 +88,48 @@ public class Main {
 
     private static void demoXmlParsers() throws Exception {
         try (InputStream is = Main.class.getResourceAsStream("/network.xml")) {
-            XmlDomParser domParser = new XmlDomParser();
-            FinancialNetwork netDom = domParser.parse(is);
-            System.out.println("DOM banks: " + (netDom.getBanks() == null ? 0 : netDom.getBanks().size()));
+            if (is == null) {
+                System.out.println("network.xml not found, skipping DOM demo");
+            } else {
+                XmlDomParser domParser = new XmlDomParser();
+                var netDom = domParser.parse(is);
+                System.out.println("DOM banks: " + (netDom.getBanks() == null ? 0 : netDom.getBanks().size()));
+            }
         }
 
         try (InputStream is = Main.class.getResourceAsStream("/network.xml")) {
-            XmlSaxParser saxParser = new XmlSaxParser();
-            FinancialNetwork netSax = saxParser.parse(is);
-            System.out.println("SAX banks: " + (netSax.getBanks() == null ? 0 : netSax.getBanks().size()));
+            if (is == null) {
+                System.out.println("network.xml not found, skipping SAX demo");
+            } else {
+                XmlSaxParser saxParser = new XmlSaxParser();
+                var netSax = saxParser.parse(is);
+                System.out.println("SAX banks: " + (netSax.getBanks() == null ? 0 : netSax.getBanks().size()));
+            }
         }
 
         try (InputStream is = Main.class.getResourceAsStream("/network.xml")) {
-            JaxbReader jaxb = new JaxbReader();
-            FinancialNetwork netJaxb = jaxb.read(is);
-            System.out.println("JAXB first bank: " +
-                    (netJaxb.getBanks() != null && !netJaxb.getBanks().isEmpty()
-                            ? netJaxb.getBanks().get(0).getName()
-                            : "<none>"));
+            if (is == null) {
+                System.out.println("network.xml not found, skipping JAXB demo");
+            } else {
+                JaxbReader jaxb = new JaxbReader();
+                var netJaxb = jaxb.read(is);
+                System.out.println("JAXB first bank: " +
+                        (netJaxb.getBanks() != null && !netJaxb.getBanks().isEmpty()
+                                ? netJaxb.getBanks().get(0).getName()
+                                : "<none>"));
+            }
         }
     }
 
     private static void demoJsonParsers() throws Exception {
         JsonReader jsonReader = new JsonReader();
         try (InputStream is = Main.class.getResourceAsStream("/network.json")) {
-            FinancialNetwork netJson = jsonReader.read(is);
+            if (is == null) {
+                System.out.println("network.json not found, skipping JSON demo");
+                return;
+            }
+
+            var netJson = jsonReader.read(is);
             String firstCustomerName = "<none>";
             if (netJson.getBanks() != null
                     && !netJson.getBanks().isEmpty()
@@ -93,68 +141,5 @@ public class Main {
         }
 
         jsonReader.demoJsonPath("/network.json");
-    }
-
-    private static void importNetworkFromJson(BankService bankService) throws Exception {
-        JsonReader jsonReader = new JsonReader();
-        try (InputStream is = Main.class.getResourceAsStream("/network.json")) {
-            FinancialNetwork netForDb = jsonReader.read(is);
-
-            if (netForDb.getBanks() == null || netForDb.getBanks().isEmpty()) {
-                System.out.println("No banks found in JSON, skipping DB import.");
-                return;
-            }
-
-            for (Bank bank : netForDb.getBanks()) {
-                bankService.create(bank);
-                System.out.println("Inserted bank: " + bank.getName() +
-                        " (id=" + bank.getId() + ")");
-            }
-        }
-    }
-
-    private static void printAllCustomers(CustomerService customerService) {
-        System.out.println("---- All customers from DB ----");
-        List<Customer> customers = customerService.getAll();
-        for (Customer c : customers) {
-            System.out.println(c.getId() + " | " + c.getFullName() + " | " + c.getBirthDate());
-        }
-    }
-
-    private static void demoAdvancedServiceMethods(BankService bankService,
-                                                   CustomerService customerService) {
-
-        System.out.println("---- Advanced service methods demo ----");
-
-        long exampleBankId = 1L;
-        Optional<Bank> bankOpt = bankService.getByIdWithBranchesAndAddresses(exampleBankId);
-        bankOpt.ifPresent(bank -> {
-            System.out.println("Bank with details: " + bank.getName());
-            if (bank.getBranches() != null) {
-                bank.getBranches().forEach(br ->
-                        System.out.println("  Branch " + br.getCode() +
-                                " | addressId=" + br.getAddressId()));
-            }
-        });
-
-        long exampleCustomerId = 1L;
-        Optional<Customer> custOpt = customerService.getByIdWithAccountsAndLoans(exampleCustomerId);
-        custOpt.ifPresent(c -> {
-            System.out.println("Customer with details: " + c.getFullName());
-
-            if (c.getAccounts() != null) {
-                System.out.println("  Accounts: " + c.getAccounts().size());
-            }
-            if (c.getLoans() != null) {
-                System.out.println("  Loans: " + c.getLoans().size());
-            }
-        });
-
-        String city = "Tbilisi";
-        List<Customer> customersInCity = customerService.getByCity(city);
-        System.out.println("Customers in " + city + ": " + customersInCity.size());
-        for (Customer c : customersInCity) {
-            System.out.println("  " + c.getId() + " | " + c.getFullName());
-        }
     }
 }
