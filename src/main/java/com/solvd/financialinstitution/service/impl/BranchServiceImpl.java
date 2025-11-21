@@ -3,7 +3,7 @@ package com.solvd.financialinstitution.service.impl;
 import com.solvd.financialinstitution.domain.Address;
 import com.solvd.financialinstitution.domain.Branch;
 import com.solvd.financialinstitution.persistence.BranchDao;
-import com.solvd.financialinstitution.persistence.impl.BranchDaoImpl;
+import com.solvd.financialinstitution.persistence.impl.BranchMyBatisDaoImpl;
 import com.solvd.financialinstitution.service.AddressService;
 import com.solvd.financialinstitution.service.BranchService;
 
@@ -16,7 +16,7 @@ public class BranchServiceImpl implements BranchService {
     private final AddressService addressService;
 
     public BranchServiceImpl() {
-        this(new BranchDaoImpl(), new AddressServiceImpl());
+        this(new BranchMyBatisDaoImpl(), new AddressServiceImpl());
     }
 
     public BranchServiceImpl(BranchDao branchDao, AddressService addressService) {

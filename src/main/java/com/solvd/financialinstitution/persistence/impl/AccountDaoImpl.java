@@ -5,13 +5,7 @@ import com.solvd.financialinstitution.domain.AccountType;
 import com.solvd.financialinstitution.persistence.AccountDao;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

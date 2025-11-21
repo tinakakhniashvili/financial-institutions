@@ -17,8 +17,6 @@ public interface BankService {
 
     void delete(long id);
 
-    Bank createWithBranchesAndAddresses(Bank bank);
-
     Optional<Bank> getByIdWithBranchesAndAddresses(long id);
 
     List<Bank> getAllWithBranchesAndAddresses();

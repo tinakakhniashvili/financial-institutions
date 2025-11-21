@@ -7,19 +7,10 @@ import com.solvd.financialinstitution.domain.Loan;
 import com.solvd.financialinstitution.persistence.ConnectionPool;
 import com.solvd.financialinstitution.persistence.CustomerDao;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class CustomerDaoImpl implements CustomerDao {
 

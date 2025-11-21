@@ -2,6 +2,7 @@ package com.solvd.financialinstitution.service.impl;
 
 import com.solvd.financialinstitution.domain.Loan;
 import com.solvd.financialinstitution.persistence.LoanDao;
+import com.solvd.financialinstitution.persistence.impl.LoanMyBatisDaoImpl;
 import com.solvd.financialinstitution.service.LoanService;
 
 import java.util.List;
@@ -10,6 +11,10 @@ import java.util.Optional;
 public class LoanServiceImpl implements LoanService {
 
     private final LoanDao loanDao;
+
+    public LoanServiceImpl() {
+        this(new LoanMyBatisDaoImpl());
+    }
 
     public LoanServiceImpl(LoanDao loanDao) {
         this.loanDao = loanDao;

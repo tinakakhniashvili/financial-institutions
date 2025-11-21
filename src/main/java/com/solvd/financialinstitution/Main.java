@@ -3,7 +3,6 @@ package com.solvd.financialinstitution;
 import com.solvd.financialinstitution.domain.Bank;
 import com.solvd.financialinstitution.domain.Customer;
 import com.solvd.financialinstitution.domain.FinancialNetwork;
-import com.solvd.financialinstitution.service.parsers.json.JsonReader;
 import com.solvd.financialinstitution.persistence.BankDao;
 import com.solvd.financialinstitution.persistence.CustomerDao;
 import com.solvd.financialinstitution.persistence.impl.BankDaoImpl;
@@ -15,6 +14,7 @@ import com.solvd.financialinstitution.service.impl.CustomerServiceImpl;
 import com.solvd.financialinstitution.service.parsers.XmlDomParser;
 import com.solvd.financialinstitution.service.parsers.XmlValidator;
 import com.solvd.financialinstitution.service.parsers.jaxb.JaxbReader;
+import com.solvd.financialinstitution.service.parsers.json.JsonReader;
 import com.solvd.financialinstitution.service.parsers.sax.XmlSaxParser;
 
 import java.io.InputStream;
@@ -106,7 +106,7 @@ public class Main {
             }
 
             for (Bank bank : netForDb.getBanks()) {
-                bankService.createWithBranchesAndAddresses(bank);
+                bankService.create(bank);
                 System.out.println("Inserted bank: " + bank.getName() +
                         " (id=" + bank.getId() + ")");
             }

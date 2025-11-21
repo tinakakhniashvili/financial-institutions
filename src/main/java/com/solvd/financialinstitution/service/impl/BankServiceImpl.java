@@ -30,7 +30,24 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public void create(Bank bank) {
+        if (bank == null) {
+            throw new IllegalArgumentException("bank must not be null");
+        }
+
         bankDao.create(bank);
+
+        List<Branch> branches = bank.getBranches();
+        if (branches == null || branches.isEmpty()) {
+            return;
+        }
+
+        for (Branch branch : branches) {
+            if (branch == null) {
+                continue;
+            }
+            branch.setBankId(bank.getId());
+            branchService.create(branch);
+        }
     }
 
     @Override
@@ -51,30 +68,6 @@ public class BankServiceImpl implements BankService {
     @Override
     public void delete(long id) {
         bankDao.delete(id);
-    }
-
-    @Override
-    public Bank createWithBranchesAndAddresses(Bank bank) {
-        if (bank == null) {
-            throw new IllegalArgumentException("bank must not be null");
-        }
-
-        bankDao.create(bank);
-
-        List<Branch> branches = bank.getBranches();
-        if (branches == null || branches.isEmpty()) {
-            return bank;
-        }
-
-        for (Branch branch : branches) {
-            if (branch == null) {
-                continue;
-            }
-            branch.setBankId(bank.getId());
-            branchService.create(branch);
-        }
-
-        return bank;
     }
 
     @Override

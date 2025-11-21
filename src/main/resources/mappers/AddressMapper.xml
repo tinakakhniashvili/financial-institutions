@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.financialinstitution.persistence.mybatis.AddressMapper">
+
+    <resultMap id="AddressResultMap" type="com.solvd.financialinstitution.domain.Address">
+        <id     property="id"      column="ID"/>
+        <result property="country" column="COUNTRY"/>
+        <result property="city"    column="CITY"/>
+        <result property="line1"   column="LINE1"/>
+        <result property="zip"     column="ZIP"/>
+    </resultMap>
+
+    <insert id="create"
+            parameterType="com.solvd.financialinstitution.domain.Address"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO address (COUNTRY, CITY, LINE1, ZIP)
+        VALUES (#{country}, #{city}, #{line1}, #{zip})
+    </insert>
+
+    <select id="findById"
+            parameterType="long"
+            resultMap="AddressResultMap">
+        SELECT ID, COUNTRY, CITY, LINE1, ZIP
+        FROM address
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAll"
+            resultMap="AddressResultMap">
+        SELECT ID, COUNTRY, CITY, LINE1, ZIP
+        FROM address
+    </select>
+
+    <update id="update"
+            parameterType="com.solvd.financialinstitution.domain.Address">
+        UPDATE address
+        SET COUNTRY = #{country},
+        CITY    = #{city},
+        LINE1   = #{line1},
+        ZIP     = #{zip}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="delete"
+            parameterType="long">
+        DELETE FROM address
+        WHERE ID = #{id}
+    </delete>
+
+</mapper>

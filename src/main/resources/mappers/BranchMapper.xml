@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.financialinstitution.persistence.mybatis.BranchMapper">
+
+<resultMap id="BranchResultMap" type="com.solvd.financialinstitution.domain.Branch">
+        <id     property="id"        column="ID"/>
+        <result property="bankId"    column="BANK_ID"/>
+        <result property="addressId" column="ADDRESS_ID"/>
+        <result property="code"      column="CODE"/>
+    </resultMap>
+
+    <insert id="create"
+            parameterType="com.solvd.financialinstitution.domain.Branch"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO branch (BANK_ID, ADDRESS_ID, CODE)
+        VALUES (#{bankId}, #{addressId}, #{code})
+    </insert>
+
+    <select id="findById"
+            parameterType="long"
+            resultMap="BranchResultMap">
+        SELECT ID, BANK_ID, ADDRESS_ID, CODE
+        FROM branch
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAll"
+            resultMap="BranchResultMap">
+        SELECT ID, BANK_ID, ADDRESS_ID, CODE
+        FROM branch
+    </select>
+
+    <update id="update"
+            parameterType="com.solvd.financialinstitution.domain.Branch">
+        UPDATE branch
+        SET BANK_ID    = #{bankId},
+        ADDRESS_ID = #{addressId},
+        CODE       = #{code}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="delete"
+            parameterType="long">
+        DELETE FROM branch
+        WHERE ID = #{id}
+    </delete>
+
+</mapper>

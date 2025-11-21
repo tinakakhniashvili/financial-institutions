@@ -23,4 +23,13 @@
         </environment>
     </environments>
 
+    <mappers>
+        <mapper resource="mappers/BankMapper.xml"/>
+        <mapper resource="mappers/CustomerMapper.xml"/>
+        <mapper resource="mappers/AccountMapper.xml"/>
+        <mapper resource="mappers/AddressMapper.xml"/>
+        <mapper resource="mappers/BranchMapper.xml"/>
+        <mapper resource="mappers/LoanMapper.xml"/>
+    </mappers>
+
 </configuration>

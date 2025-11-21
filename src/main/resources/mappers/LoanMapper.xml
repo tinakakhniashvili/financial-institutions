@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.financialinstitution.persistence.mybatis.LoanMapper">
+
+    <resultMap id="LoanResultMap" type="com.solvd.financialinstitution.domain.Loan">
+        <id     property="id"        column="ID"/>
+        <result property="principal" column="PRINCIPAL"/>
+        <result property="rate"      column="RATE"/>
+        <result property="start"     column="START_DATE"/>
+        <result property="end"       column="END_DATE"/>
+    </resultMap>
+
+    <insert id="create"
+            parameterType="com.solvd.financialinstitution.domain.Loan"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO loan (CUSTOMER_ID, BRANCH_ID, PRINCIPAL, RATE, START_DATE, END_DATE)
+        VALUES (0, 0, #{principal}, #{rate}, #{start}, #{end})
+    </insert>
+
+    <select id="findById"
+            parameterType="long"
+            resultMap="LoanResultMap">
+        SELECT ID,
+        CUSTOMER_ID,
+        BRANCH_ID,
+        PRINCIPAL,
+        RATE,
+        START_DATE,
+        END_DATE
+        FROM loan
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAll"
+            resultMap="LoanResultMap">
+        SELECT ID,
+        CUSTOMER_ID,
+        BRANCH_ID,
+        PRINCIPAL,
+        RATE,
+        START_DATE,
+        END_DATE
+        FROM loan
+    </select>
+
+    <update id="update"
+            parameterType="com.solvd.financialinstitution.domain.Loan">
+        UPDATE loan
+        SET CUSTOMER_ID = 0,
+        BRANCH_ID   = 0,
+        PRINCIPAL   = #{principal},
+        RATE        = #{rate},
+        START_DATE  = #{start},
+        END_DATE    = #{end}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="delete"
+            parameterType="long">
+        DELETE FROM loan
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="findByCustomerId"
+            parameterType="long"
+            resultMap="LoanResultMap">
+        SELECT ID,
+        CUSTOMER_ID,
+        BRANCH_ID,
+        PRINCIPAL,
+        RATE,
+        START_DATE,
+        END_DATE
+        FROM loan
+        WHERE CUSTOMER_ID = #{customerId}
+    </select>
+
+</mapper>

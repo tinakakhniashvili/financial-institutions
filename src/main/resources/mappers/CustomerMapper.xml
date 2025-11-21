@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.financialinstitution.persistence.mybatis.CustomerMapper">
+
+    <resultMap id="CustomerResultMap" type="com.solvd.financialinstitution.domain.Customer">
+        <id     property="id"        column="ID"/>
+        <result property="bankId"    column="BANK_ID"/>
+        <result property="fullName"  column="FULL_NAME"/>
+        <result property="birthDate" column="BIRTH_DATE"/>
+        <result property="addressId" column="ADDRESS_ID"/>
+    </resultMap>
+
+    <insert id="create"
+            parameterType="com.solvd.financialinstitution.domain.Customer"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO customer (BANK_ID, FULL_NAME, BIRTH_DATE, ADDRESS_ID)
+        VALUES (#{bankId}, #{fullName}, #{birthDate}, #{addressId})
+    </insert>
+
+    <select id="findById"
+            parameterType="long"
+            resultMap="CustomerResultMap">
+        SELECT ID, BANK_ID, FULL_NAME, BIRTH_DATE, ADDRESS_ID
+        FROM customer
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAll"
+            resultMap="CustomerResultMap">
+        SELECT ID, BANK_ID, FULL_NAME, BIRTH_DATE, ADDRESS_ID
+        FROM customer
+    </select>
+
+    <update id="update"
+            parameterType="com.solvd.financialinstitution.domain.Customer">
+        UPDATE customer
+        SET BANK_ID    = #{bankId},
+        FULL_NAME  = #{fullName},
+        BIRTH_DATE = #{birthDate},
+        ADDRESS_ID = #{addressId}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="delete"
+            parameterType="long">
+        DELETE FROM customer
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="findByIdWithAccountsAndLoans"
+            parameterType="long"
+            resultMap="CustomerResultMap">
+        SELECT ID, BANK_ID, FULL_NAME, BIRTH_DATE, ADDRESS_ID
+        FROM customer
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findByCity"
+            parameterType="string"
+            resultMap="CustomerResultMap">
+        SELECT c.ID,
+        c.BANK_ID,
+        c.FULL_NAME,
+        c.BIRTH_DATE,
+        c.ADDRESS_ID
+        FROM customer c
+        JOIN address a ON c.ADDRESS_ID = a.ID
+        WHERE a.CITY = #{city}
+    </select>
+
+</mapper>

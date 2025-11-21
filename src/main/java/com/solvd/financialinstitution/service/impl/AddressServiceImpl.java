@@ -2,7 +2,7 @@ package com.solvd.financialinstitution.service.impl;
 
 import com.solvd.financialinstitution.domain.Address;
 import com.solvd.financialinstitution.persistence.AddressDao;
-import com.solvd.financialinstitution.persistence.impl.AddressDaoImpl;
+import com.solvd.financialinstitution.persistence.impl.AddressMyBatisDaoImpl;
 import com.solvd.financialinstitution.service.AddressService;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class AddressServiceImpl implements AddressService {
     private final AddressDao addressDao;
 
     public AddressServiceImpl() {
-        this(new AddressDaoImpl());
+        this(new AddressMyBatisDaoImpl());
     }
 
     public AddressServiceImpl(AddressDao addressDao) {

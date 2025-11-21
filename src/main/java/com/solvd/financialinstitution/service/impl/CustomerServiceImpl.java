@@ -2,6 +2,7 @@ package com.solvd.financialinstitution.service.impl;
 
 import com.solvd.financialinstitution.domain.Customer;
 import com.solvd.financialinstitution.persistence.CustomerDao;
+import com.solvd.financialinstitution.persistence.impl.CustomerMyBatisDaoImpl;
 import com.solvd.financialinstitution.service.CustomerService;
 
 import java.util.List;
@@ -10,6 +11,10 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerDao customerDao;
+
+    public CustomerServiceImpl() {
+        this(new CustomerMyBatisDaoImpl());
+    }
 
     public CustomerServiceImpl(CustomerDao customerDao) {
         this.customerDao = customerDao;

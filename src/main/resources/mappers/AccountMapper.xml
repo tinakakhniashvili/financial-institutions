@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.financialinstitution.persistence.mybatis.AccountMapper">
+
+    <resultMap id="AccountResultMap" type="com.solvd.financialinstitution.domain.Account">
+        <id     property="id"         column="ID"/>
+        <result property="customerId" column="CUSTOMER_ID"/>
+        <result property="branchId"   column="BRANCH_ID"/>
+        <result property="iban"       column="IBAN"/>
+        <result property="balance"    column="BALANCE"/>
+        <result property="openedOn"   column="OPENED_ON"/>
+        <association property="type" javaType="com.solvd.financialinstitution.domain.AccountType">
+            <id property="id" column="ACCOUNT_TYPE_ID"/>
+        </association>
+    </resultMap>
+
+    <insert id="create"
+            parameterType="com.solvd.financialinstitution.domain.Account"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO account (CUSTOMER_ID, BRANCH_ID, ACCOUNT_TYPE_ID, IBAN, BALANCE, OPENED_ON)
+        VALUES (#{customerId}, #{branchId}, #{type.id}, #{iban}, #{balance}, #{openedOn})
+    </insert>
+
+    <select id="findById"
+            parameterType="long"
+            resultMap="AccountResultMap">
+        SELECT ID,
+        CUSTOMER_ID,
+        BRANCH_ID,
+        ACCOUNT_TYPE_ID,
+        IBAN,
+        BALANCE,
+        OPENED_ON
+        FROM account
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAll"
+            resultMap="AccountResultMap">
+        SELECT ID,
+        CUSTOMER_ID,
+        BRANCH_ID,
+        ACCOUNT_TYPE_ID,
+        IBAN,
+        BALANCE,
+        OPENED_ON
+        FROM account
+    </select>
+
+    <update id="update"
+            parameterType="com.solvd.financialinstitution.domain.Account">
+        UPDATE account
+        SET CUSTOMER_ID     = #{customerId},
+        BRANCH_ID       = #{branchId},
+        ACCOUNT_TYPE_ID = #{type.id},
+        IBAN            = #{iban},
+        BALANCE         = #{balance},
+        OPENED_ON       = #{openedOn}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="delete"
+            parameterType="long">
+        DELETE FROM account
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="findByCustomerId"
+            parameterType="long"
+            resultMap="AccountResultMap">
+        SELECT ID,
+        CUSTOMER_ID,
+        BRANCH_ID,
+        ACCOUNT_TYPE_ID,
+        IBAN,
+        BALANCE,
+        OPENED_ON
+        FROM account
+        WHERE CUSTOMER_ID = #{customerId}
+    </select>
+
+</mapper>
